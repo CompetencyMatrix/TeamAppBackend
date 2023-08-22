@@ -51,9 +51,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Employee'
-        '422':
-          description: Unprocessable Entity
-          
         '405':
           description: Invalid input
   
@@ -101,7 +98,7 @@ paths:
       parameters:
         - name: employeeId
           in: path
-          description: ID of pet to return
+          description: ID of employee to return
           required: true
           schema:
             type: string
@@ -135,6 +132,8 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Employee not found
+        '409':
+          description: Delete impossible
 
   /api/employees/findBySkills:
     get:
@@ -142,7 +141,7 @@ paths:
         - employee
       summary: Finds Employees by skills
       description: Multiple skill values can be provided with comma separated strings
-      operationId: findEmployeeBySkills
+      operationId: findEmployeesBySkills
       parameters:
         - name: skills
           in: query
@@ -163,8 +162,39 @@ paths:
                 items:
                   $ref: '#/components/schemas/Employee'
         '400':
-          description: Invalid skill value
+          description: Invalid skills value
+        '406':
+          description: No matching Employee found
+
+  /api/employees/findByProject:
+    get:
+      tags:
+        - employee
+      summary: Finds Employees by Project ID
+      description: Returns all Employees that are assigned to particular project.
+      operationId: findEmployeesByProject
+      parameters:
+        - name: projectId
+          in: query
+          description: ID of the Project, from which Employees are asked  
+          required: true
+          schema:
+            type: string
+            
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Employee'
+        '400':
+          description: Invalid ID supplied
         '404':
+          description: Project not found
+        '406':
           description: No matching Employee found
   
   /api/projects:
@@ -172,7 +202,7 @@ paths:
       tags:
         - project
       summary: Returns all company's projects
-      description: Returns a map of status codes to quantities
+      description: Returns all company's projects
       operationId: getProjects
       responses:
         '200':
@@ -278,3 +308,4 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Employee'
+    
