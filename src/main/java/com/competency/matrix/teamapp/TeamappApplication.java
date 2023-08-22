@@ -1,4 +1,4 @@
-package com.backend.competencymatrix.teamapp;
+package com.competency.matrix.teamapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
