@@ -13,4 +13,12 @@ public class SkillService {
     public List<Skill> getSkills() {
         return skillRepository.findAll();
     }
+
+    public void addSkills(List<Skill> skills) {
+        skillRepository.saveAll(skills);
+    }
+
+    public void addSkill(Skill skill) {
+        skillRepository.save(skill);
+    }
 }

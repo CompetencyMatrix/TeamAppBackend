@@ -2,7 +2,9 @@ package com.competency.matrix.teamapp.skill;
 
 import com.competency.matrix.teamapp.employeeSkill.EmployeeSkill;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -11,6 +13,8 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class Skill {
     @Id
     @Column(name = "skillId")
