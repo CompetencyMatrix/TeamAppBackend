@@ -18,12 +18,12 @@ public class EmployeeSkill {
     private EmployeeSkillId id;
 
     @ManyToOne
-    @JoinColumn( name = "employeeId")
+    @JoinColumn(name = "employeeId")
     @MapsId("employeeId")
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn( name = "skillId")
+    @JoinColumn(name = "skillId")
     @MapsId("skillId")
     private Skill skill;
 

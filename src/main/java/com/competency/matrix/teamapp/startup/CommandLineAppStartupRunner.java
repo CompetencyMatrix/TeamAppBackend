@@ -23,21 +23,22 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class CommandLineAppStartupRunner implements CommandLineRunner {
+    @Value("#{'${tapp.skills.initial}'.split(',')}")
+    final List<String> skillNames;
+    @Value("#{'${tapp.employees.initial}'.split(',')}")
+    final List<String> employeeNames;
+    @Value("#{'${tapp.projects.initial}'.split(',')}")
+    final List<String> projectNames;
     private final EmployeeService employeeService;
     private final ProjectService projectService;
     private final SkillService skillService;
-
-    @Value("#{'${tapp.skills.initial}'.split(',')}") final List<String> skillNames;
-    @Value("#{'${tapp.employees.initial}'.split(',')}") final List<String> employeeNames;
-    @Value("#{'${tapp.projects.initial}'.split(',')}") final List<String> projectNames;
-
 
     @Override
     @Transactional
     public void run(String... args) throws Exception {
         List<Skill> skills = initializeSkills();
         List<Project> projects = initializeProjects();
-        initializeEmployees(skills,projects);
+        initializeEmployees(skills, projects);
     }
 
     @Transactional
@@ -47,7 +48,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
                 .collect(Collectors.toList());
         skillService.addSkills(skills);
         return skills;
-        }
+    }
 
 
     @Transactional
@@ -60,10 +61,10 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     }
 
     @Transactional
-    public List<Employee> initializeEmployees( List<Skill> skills, List<Project> projects ){
+    public List<Employee> initializeEmployees(List<Skill> skills, List<Project> projects) {
         List<Employee> employees = employeeNames.stream()
                 .map(name -> {
-                    Employee employee = new Employee(null, name, name+"owski", ZonedDateTime.now(), null, null, projects);
+                    Employee employee = new Employee(null, name, name + "owski", ZonedDateTime.now(), null, null, projects);
                     //TODO: save this EmployeeSkill in the database separately first
                     employee.setSkills(skills.stream().map(skill -> new EmployeeSkill(null, employee, skill, EmployeeSkillLevel.INTERMEDIATE)).collect(Collectors.toSet()));
                     return employee;
