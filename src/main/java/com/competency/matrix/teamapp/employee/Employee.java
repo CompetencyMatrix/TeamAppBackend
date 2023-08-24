@@ -3,6 +3,7 @@ package com.competency.matrix.teamapp.employee;
 import com.competency.matrix.teamapp.employeeSkill.EmployeeSkill;
 import com.competency.matrix.teamapp.project.Project;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,13 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @NotBlank
     private String name;
+
+    @NotBlank
     private String surname;
+
+    @Column(name = "hire_date")
     private ZonedDateTime hireDate;
 
     @ManyToOne

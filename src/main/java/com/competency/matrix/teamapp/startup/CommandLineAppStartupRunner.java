@@ -64,9 +64,9 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     public List<Employee> initializeEmployees(List<Skill> skills, List<Project> projects) {
         List<Employee> employees = employeeNames.stream()
                 .map(name -> {
-                    Employee employee = new Employee(null, name, name + "owski", ZonedDateTime.now(), null, null, projects);
+                    Employee employee = new Employee(null, name, name + "owski", ZonedDateTime.now().withHour(0), null, null, projects);
                     //TODO: save this EmployeeSkill in the database separately first
-                    employee.setSkills(skills.stream().map(skill -> new EmployeeSkill(null, employee, skill, EmployeeSkillLevel.INTERMEDIATE)).collect(Collectors.toSet()));
+                    employee.setSkills(skills.stream().map(skill -> new EmployeeSkill(null, employee, skill, EmployeeSkillLevel.MID)).collect(Collectors.toSet()));
                     return employee;
                 })
                 .collect(Collectors.toList());

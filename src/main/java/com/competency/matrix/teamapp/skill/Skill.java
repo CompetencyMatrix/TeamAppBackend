@@ -19,6 +19,8 @@ public class Skill {
     @Column(name = "skillId")
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @Column(unique = true)
     private String name;
 
     @OneToMany(mappedBy = "skill")
