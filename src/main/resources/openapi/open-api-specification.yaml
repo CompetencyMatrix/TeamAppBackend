@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: TeamApp
-  description: "Documentation for TeamApp - competency matrix application depiciting skills of the company's employees" 
+  description: "Documentation for TeamApp - competency matrix application depiciting skills of the company's employees"
   contact:
     email: filippawlowski01@wp.pl
   version: 0.0.1
@@ -19,9 +19,25 @@ paths:
     get:
       tags:
         - employee
-      summary: Returns a list of all employees
-      description: Returns a list of all employees
+      summary: Returns a list of all employees, optionally filtered by their skills or assigned projects.
+      description: Without parameter - returns all employees from the system. When provided project ID parameter - returns employees, that are assigned to the particular project. When provided comma separated skills names - returns employees, that share those skills.
       operationId: getEmployees
+      parameters:
+        - name: skills
+          in: query
+          description: Skill values that need to be considered for filter
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: projectId
+          in: query
+          description: ID of the Project, to which Employees are assigned
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: Successful fetch of employees
@@ -31,11 +47,16 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Employee'
+        '400':
+          description: Invalid parameter value
+        '406':
+          description: No matching Employees found
+
     post:
       tags:
         - employee
       summary: Add a new employee to the company
-      description: Add a new employees to the company
+      description: Add a new employee to the company
       operationId: addEmployee
       requestBody:
         description: Create a new employee in the company
@@ -51,9 +72,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Employee'
-        '405':
-          description: Invalid input
-  
+        '400':
+          description: Adding Employee faile due to invalid input
+
   /api/employees/{employeeId}:
     put:
       tags:
@@ -64,12 +85,12 @@ paths:
       parameters:
         - name: employeeId
           in: path
-          description: ID of pet to return
+          description: ID of Employee to return
           required: true
           schema:
             type: string
       requestBody:
-        description: Update an existent employee in the company
+        description: Update an existing Employee in the company
         content:
           application/json:
             schema:
@@ -88,7 +109,7 @@ paths:
           description: Employee not found
         '405':
           description: Validation exception
-          
+
     delete:
       tags:
         - employee
@@ -104,9 +125,11 @@ paths:
             type: string
       responses:
         '200':
-          description: Successful delete of employee
+          description: Employee successfully deleted
         '404':
           description: Employee not found
+        '409':
+          description: Delete impossible
 
     get:
       tags:
@@ -132,71 +155,7 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Employee not found
-        '409':
-          description: Delete impossible
 
-  /api/employees/findBySkills:
-    get:
-      tags:
-        - employee
-      summary: Finds Employees by skills
-      description: Multiple skill values can be provided with comma separated strings
-      operationId: findEmployeesBySkills
-      parameters:
-        - name: skills
-          in: query
-          description: Skill values that need to be considered for filter
-          required: false
-          explode: true
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Employee'
-        '400':
-          description: Invalid skills value
-        '406':
-          description: No matching Employee found
-
-  /api/employees/findByProject:
-    get:
-      tags:
-        - employee
-      summary: Finds Employees by Project ID
-      description: Returns all Employees that are assigned to particular project.
-      operationId: findEmployeesByProject
-      parameters:
-        - name: projectId
-          in: query
-          description: ID of the Project, from which Employees are asked  
-          required: true
-          schema:
-            type: string
-            
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Employee'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Project not found
-        '406':
-          description: No matching Employee found
-  
   /api/projects:
     get:
       tags:
@@ -213,13 +172,117 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Project'
-  
+    post:
+      tags:
+        - project
+      summary: Add a new Project to the company
+      description: Add a new Project to the company
+      operationId: addProject
+      requestBody:
+        description: Create a new Project in the company
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Adding Project faile due to invalid input
+
+  /api/projects/{projectId}:
+    put:
+      tags:
+        - project
+      summary: Update an existing Project
+      description: Update an existing Project by ID
+      operationId: updateProject
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of Project to return
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existing Project in the company
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Project not found
+        '405':
+          description: Validation exception
+
+    delete:
+      tags:
+        - project
+      summary: Deletes an Project
+      description: delete an Project
+      operationId: deleteProject
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of the Project to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Project successfully deleted
+        '404':
+          description: Project not found
+        '409':
+          description: Delete impossible
+
+    get:
+      tags:
+        - project
+      summary: Find project by ID
+      description: Find project by ID
+      operationId: getProject
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of the Project to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Project not found
+
+
   /api/skills:
     get:
       tags:
         - skill
       summary: Returns all registered skills
-      description: Returns an array of skills that are existent in the system
+      description: Returns an array of skills that exist in the system
       operationId: getSkills
       responses:
         '200':
@@ -229,8 +292,113 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/EmployeeSkill'
-                  
+                  $ref: '#/components/schemas/Skill'
+
+    post:
+      tags:
+        - skill
+      summary: Add a new skill to the company
+      description: Add a new skill to the company
+      operationId: addSkill
+      requestBody:
+        description: Create a new skill in the company
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Skill'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+        '400':
+          description: Adding Skill faile due to invalid input
+
+  /api/skills/{skillId}:
+    put:
+      tags:
+        - skill
+      summary: Update an existing skill
+      description: Update an existing skill by ID
+      operationId: updateSkill
+      parameters:
+        - name: skillId
+          in: path
+          description: ID of the Skill to return
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existing Skill in the company
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Skill'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Skill not found
+        '405':
+          description: Validation exception
+
+    delete:
+      tags:
+        - skill
+      summary: Deletes an skill
+      description: delete an skill
+      operationId: deleteSkill
+      parameters:
+        - name: skillId
+          in: path
+          description: ID of skill to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Skill successfully deleted
+        '404':
+          description: Skill not found
+        '409':
+          description: Delete impossible
+
+    get:
+      tags:
+        - skill
+      summary: Find skill by ID
+      description: Find skill by ID
+      operationId: getSkill
+      parameters:
+        - name: skillId
+          in: path
+          description: ID of skill to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Skill not found
+
+
 components:
   schemas:
     Employee:
@@ -257,7 +425,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Project'
-    
+
     EmployeeSkill:
       type: object
       properties:
@@ -271,8 +439,8 @@ components:
           enum:
             - beginner
             - intermediate
-            - advanced    
-        
+            - advanced
+
     Project:
       type: object
       properties:
@@ -308,4 +476,3 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Employee'
-    
