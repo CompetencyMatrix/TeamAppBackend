@@ -39,9 +39,9 @@ public class Employee {
     //TODO: consider lazy loading - fetch
     //TODO: Set czy List
     //MappedBy added, because of OpenApi specification - there are possible calls that require finding employees, that have particular skill - search can go in this direction
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<EmployeeSkill> skills;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Project> projects;
 }

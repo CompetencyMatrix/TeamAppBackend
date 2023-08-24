@@ -2,8 +2,6 @@ package com.competency.matrix.teamapp.startup;
 
 import com.competency.matrix.teamapp.employee.Employee;
 import com.competency.matrix.teamapp.employee.EmployeeService;
-import com.competency.matrix.teamapp.employeeSkill.EmployeeSkill;
-import com.competency.matrix.teamapp.employeeSkill.EmployeeSkillLevel;
 import com.competency.matrix.teamapp.project.Project;
 import com.competency.matrix.teamapp.project.ProjectService;
 import com.competency.matrix.teamapp.skill.Skill;
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.random.RandomGenerator;
@@ -68,8 +65,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
         List<Employee> employees = employeeNames.stream()
                 .map(name ->  new Employee(null, name, name + "owski", ZonedDateTime.now().withHour(0).minusDays(RandomGenerator.getDefault().nextInt(3650)), null, null, projects))
                 .collect(Collectors.toList());
-        employeeService.addEmployees(employees);
-        employees.forEach(employee -> employeeService.addSkills(employee, skills.subList(RandomGenerator.getDefault().nextInt(skills.size()-1), skills.size()-1)));
+        employees.forEach(employee -> employeeService.addSkillsToEmployee(employee, skills.subList(RandomGenerator.getDefault().nextInt(skills.size()-1), skills.size()-1)));
         return employees;
     }
 }

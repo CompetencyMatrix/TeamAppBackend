@@ -15,5 +15,5 @@ public interface EmployeeServiceInterface {
     public void addEmployees(List<Employee> employees);
     public void addEmployee(Employee employee);
     public void updateEmployee(String pathEmployeeId, Employee employee);
-    public void addSkills(Employee employee, List<Skill> skills);
+    public void addSkillsToEmployee(Employee employee, List<Skill> skills);
 }

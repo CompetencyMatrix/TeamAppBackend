@@ -17,7 +17,7 @@ public class EmployeeSkill {
     @EmbeddedId
     private EmployeeSkillId id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employeeId")
     @MapsId("employeeId")
     private Employee employee;

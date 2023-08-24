@@ -23,7 +23,6 @@ public class EmployeeService implements EmployeeServiceInterface {
     private final EmployeeRepository employeeRepository;
     private final ProjectRepository projectRepository;
     private final SkillRepository skillRepository;
-    private final EmployeeSkillRepository employeeSkillRepository;
 
     public List<Employee> getEmployees(List<String> requiredSkillsNames, String employeesCommonProjectId) {
 
@@ -76,16 +75,13 @@ public class EmployeeService implements EmployeeServiceInterface {
         employeeRepository.save(employee);
     }
 
-    public void addSkills(Employee employee, List<Skill> skills) {
-        //TODO: Moze ID moze byc null - bo mapsId
-        //TODO: Czy musze ustawic tez skillowi jego EmployeeSkill i update zrobic
+    public void addSkillsToEmployee(Employee employee, List<Skill> skills) {
         Set<EmployeeSkill> employeeSkills = skills.stream().map(skill -> new EmployeeSkill(
                 new EmployeeSkillId(employee.getId(), skill.getId()),
                 employee,
                 skill,
                 EmployeeSkillLevel.JUNIOR)).collect(Collectors.toSet());
         employee.setSkills(employeeSkills);
-        employeeSkillRepository.saveAll(employeeSkills);
         employeeRepository.save(employee);
     }
 }
