@@ -1,6 +1,7 @@
 package com.competency.matrix.teamapp.employeeSkill;
 
 import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import java.util.Objects;
 
 @Embeddable
 @RequiredArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class EmployeeSkillId implements Serializable {

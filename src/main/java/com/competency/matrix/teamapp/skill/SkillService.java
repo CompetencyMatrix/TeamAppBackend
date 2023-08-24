@@ -7,7 +7,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class SkillService {
+public class SkillService implements SkillServiceInterface {
     private final SkillRepository skillRepository;
 
     public List<Skill> getSkills() {

@@ -16,7 +16,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 
 @Profile("!test")
@@ -44,7 +47,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     @Transactional
     public List<Skill> initializeSkills() {
         List<Skill> skills = skillNames.stream()
-                .map(name -> new Skill(null, name, null))
+                .map(name -> new Skill(null, name, new HashSet<>()))
                 .collect(Collectors.toList());
         skillService.addSkills(skills);
         return skills;
@@ -54,7 +57,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     @Transactional
     public List<Project> initializeProjects() {
         List<Project> projects = projectNames.stream()
-                .map(name -> new Project(null, name, ZonedDateTime.now(), ZonedDateTime.now()))
+                .map(name -> new Project(null, name, ZonedDateTime.now().minusDays(RandomGenerator.getDefault().nextInt(3650)), ZonedDateTime.now().plusDays(RandomGenerator.getDefault().nextInt(3650))))
                 .collect(Collectors.toList());
         projectService.addProjects(projects);
         return projects;
@@ -63,14 +66,10 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     @Transactional
     public List<Employee> initializeEmployees(List<Skill> skills, List<Project> projects) {
         List<Employee> employees = employeeNames.stream()
-                .map(name -> {
-                    Employee employee = new Employee(null, name, name + "owski", ZonedDateTime.now().withHour(0), null, null, projects);
-                    //TODO: save this EmployeeSkill in the database separately first
-                    employee.setSkills(skills.stream().map(skill -> new EmployeeSkill(null, employee, skill, EmployeeSkillLevel.MID)).collect(Collectors.toSet()));
-                    return employee;
-                })
+                .map(name ->  new Employee(null, name, name + "owski", ZonedDateTime.now().withHour(0).minusDays(RandomGenerator.getDefault().nextInt(3650)), null, null, projects))
                 .collect(Collectors.toList());
         employeeService.addEmployees(employees);
+        employees.forEach(employee -> employeeService.addSkills(employee, skills.subList(RandomGenerator.getDefault().nextInt(skills.size()-1), skills.size()-1)));
         return employees;
     }
 }
