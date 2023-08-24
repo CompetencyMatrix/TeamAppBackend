@@ -15,8 +15,8 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getEmployees(@RequestParam(required = false) String skillId, @RequestParam(required = false) String projectId ){
-        return ResponseEntity.ok(employeeService.getEmployees(skillId, projectId));
+    public ResponseEntity<List<Employee>> getEmployees(@RequestParam(required = false, name = "skills") List<String> requiredSkillsNames, @RequestParam(required = false, name = "projectId") String employeesCommonProjectId ){
+        return ResponseEntity.ok(employeeService.getEmployees(requiredSkillsNames, employeesCommonProjectId));
     }
 
     @PostMapping

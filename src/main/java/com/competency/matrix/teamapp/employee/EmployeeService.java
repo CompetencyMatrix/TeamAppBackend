@@ -1,5 +1,9 @@
 package com.competency.matrix.teamapp.employee;
 
+import com.competency.matrix.teamapp.exceptions.InvalidParameterException;
+import com.competency.matrix.teamapp.exceptions.NoMatchForParametersFound;
+import com.competency.matrix.teamapp.project.ProjectRepository;
+import com.competency.matrix.teamapp.skill.SkillRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -10,14 +14,36 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
+    private final ProjectRepository projectRepository;
+    private final SkillRepository skillRepository;
 
-    public List<Employee> getEmployees(String skillId, String projectId) {
+    public List<Employee> getEmployees(List<String> requiredSkillsNames, String employeesCommonProjectId) {
 
-        if (skillId != null) {
+        if (requiredSkillsNames != null) {
+            if (requiredSkillsNames.isEmpty()) {
+                throw new InvalidParameterException("Empty list of required Employee's skills passed.");
+            }
+
+            if (!skillRepository.existsByNameIn(requiredSkillsNames)) {
+                throw new InvalidParameterException("Skills with specified names don't exist.");
+            }
+
+            List<Employee> foundEmployees = employeeRepository.findAllBySkillsSkillNameIn(requiredSkillsNames);
+            if (foundEmployees.isEmpty()) {
+                throw new NoMatchForParametersFound("No Employees with skills from list: " + requiredSkillsNames + " found.");
+            }
         }
-        if (projectId != null) {
-            return employeeRepository.findAllByProjectsId(projectId);
+
+        if (employeesCommonProjectId != null) {
+            if (!projectRepository.existsById(employeesCommonProjectId)) {
+                throw new InvalidParameterException("Project with ID: " + employeesCommonProjectId + " doesn't exist.");
+            }
+            List<Employee> foundEmployees = employeeRepository.findAllByProjectsId(employeesCommonProjectId);
+            if (foundEmployees.isEmpty()) {
+                throw new NoMatchForParametersFound("No Employees assigned to the project with ID: " + employeesCommonProjectId + " found.");
+            }
         }
+
         return employeeRepository.findAll();
     }
 

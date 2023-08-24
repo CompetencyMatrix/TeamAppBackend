@@ -10,6 +10,7 @@ import java.util.Optional;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, String> {
 
-//    List<Employee> findAllByProjectsContaining(List<Project> projects);
     List<Employee> findAllByProjectsId(String projectId);
+    List<Employee> findAllBySkillsSkillNameIn(List<String> skillsNames);
+
 }
