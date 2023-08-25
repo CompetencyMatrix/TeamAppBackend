@@ -2,6 +2,7 @@ package com.competency.matrix.teamapp.employee;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,8 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getEmployees(requiredSkillsNames, employeesCommonProjectId));
     }
 
-    @PostMapping
+    @PostMapping(consumes = "application/json;charset=UTF-8")
+    @ResponseBody
     public ResponseEntity<Employee> addEmployee(@Valid @RequestBody Employee employee) {
         employeeService.addEmployee(employee);
         return ResponseEntity.ok().build();

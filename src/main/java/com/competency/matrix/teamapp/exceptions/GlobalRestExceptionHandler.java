@@ -31,7 +31,7 @@ public class GlobalRestExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     private ResponseEntity<Object> handleDefaultException(
-            RuntimeException exception
+            Exception exception
     ) {
         String bodyOfResponse = "Couldn't process the request.";
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(bodyOfResponse + " " + exception.getMessage());

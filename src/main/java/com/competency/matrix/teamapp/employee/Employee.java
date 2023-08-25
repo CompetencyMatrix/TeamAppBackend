@@ -2,6 +2,8 @@ package com.competency.matrix.teamapp.employee;
 
 import com.competency.matrix.teamapp.employeeSkill.EmployeeSkill;
 import com.competency.matrix.teamapp.project.Project;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -40,6 +42,9 @@ public class Employee {
     //TODO: Set czy List
     //MappedBy added, because of OpenApi specification - there are possible calls that require finding employees, that have particular skill - search can go in this direction
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    //TODO: JsonIgnore dodane - zeby mozna bylo post - usunac to, przy zmianie na TDO
+    @JsonIgnore
     private Set<EmployeeSkill> skills;
 
     @ManyToMany(fetch = FetchType.LAZY)
