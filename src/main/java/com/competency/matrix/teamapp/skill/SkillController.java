@@ -18,5 +18,4 @@ public class SkillController {
     public ResponseEntity<List<Skill>> getSkills() {
         return ResponseEntity.ok(skillService.getSkills());
     }
-
 }
