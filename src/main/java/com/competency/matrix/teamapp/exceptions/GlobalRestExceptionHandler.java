@@ -1,7 +1,12 @@
-package com.competency.matrix.teamapp.exceptions.handlers;
+package com.competency.matrix.teamapp.exceptions;
 
 import com.competency.matrix.teamapp.employee.exceptions.EmployeeNotFoundException;
-import com.competency.matrix.teamapp.exceptions.*;
+import com.competency.matrix.teamapp.exceptions.server_data_exceptions.DatabaseDeleteFailException;
+import com.competency.matrix.teamapp.exceptions.server_data_exceptions.DatabaseSaveFailException;
+import com.competency.matrix.teamapp.exceptions.server_data_exceptions.NoMatchForParametersFoundException;
+import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ResourceNotFoundException;
+import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidParameterException;
+import com.competency.matrix.teamapp.exceptions.request_data_exceptions.PutIdMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
