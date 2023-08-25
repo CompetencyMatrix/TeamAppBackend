@@ -3,14 +3,12 @@ package com.competency.matrix.teamapp.employee;
 import com.competency.matrix.teamapp.employeeSkill.EmployeeSkill;
 import com.competency.matrix.teamapp.employeeSkill.EmployeeSkillId;
 import com.competency.matrix.teamapp.employeeSkill.EmployeeSkillLevel;
-import com.competency.matrix.teamapp.employeeSkill.EmployeeSkillRepository;
-import com.competency.matrix.teamapp.exceptions.InvalidParameterException;
-import com.competency.matrix.teamapp.exceptions.NoMatchForParametersFound;
+import com.competency.matrix.teamapp.exceptions.*;
 import com.competency.matrix.teamapp.project.ProjectRepository;
 import com.competency.matrix.teamapp.skill.Skill;
 import com.competency.matrix.teamapp.skill.SkillRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,7 +35,7 @@ public class EmployeeService implements EmployeeServiceInterface {
 
             List<Employee> foundEmployees = employeeRepository.findAllBySkillsSkillNameIn(requiredSkillsNames);
             if (foundEmployees.isEmpty()) {
-                throw new NoMatchForParametersFound("No Employees with skills from list: " + requiredSkillsNames + " found.");
+                throw new NoMatchForParametersFoundException("No Employees with skills from list: " + requiredSkillsNames + " found.");
             }
         }
 
@@ -47,7 +45,7 @@ public class EmployeeService implements EmployeeServiceInterface {
             }
             List<Employee> foundEmployees = employeeRepository.findAllByProjectsId(employeesCommonProjectId);
             if (foundEmployees.isEmpty()) {
-                throw new NoMatchForParametersFound("No Employees assigned to the project with ID: " + employeesCommonProjectId + " found.");
+                throw new NoMatchForParametersFoundException("No Employees assigned to the project with ID: " + employeesCommonProjectId + " found.");
             }
         }
 
@@ -55,24 +53,31 @@ public class EmployeeService implements EmployeeServiceInterface {
     }
 
     public void addEmployees(List<Employee> employees) {
-        employeeRepository.saveAll(employees);
+        try {
+            employeeRepository.saveAll(employees);
+        }
+        catch (IllegalArgumentException exception) {
+            throw new DatabaseSaveFailException("Tried to save Employee that is 'null'.");
+        }
+        catch (OptimisticLockingFailureException exception) {
+            throw new DatabaseSaveFailException("Employee doesn't meet database constraints. " + exception.getMessage());
+        }
     }
 
     public void addEmployee(Employee employee) {
-        employeeRepository.save(employee);
+        saveToDatabase(employee);
     }
 
     public void updateEmployee(String pathEmployeeId, Employee employee) {
         if (!pathEmployeeId.equals(employee.getId())) {
-            //TODO: exception
-            throw new RuntimeException();
+            throw new PutIdMismatchException("Tried to update update employee with different ID than in the path.");
         } else {
             if (!employeeRepository.existsById(pathEmployeeId)) {
-
+                throw new ResourceNotFoundException("Employee with specified ID doesn't exist in the database.");
             } else {
+                saveToDatabase(employee);
             }
         }
-        employeeRepository.save(employee);
     }
 
     public void addSkillsToEmployee(Employee employee, List<Skill> skills) {
@@ -83,5 +88,17 @@ public class EmployeeService implements EmployeeServiceInterface {
                 EmployeeSkillLevel.JUNIOR)).collect(Collectors.toSet());
         employee.setSkills(employeeSkills);
         employeeRepository.save(employee);
+    }
+
+    private void saveToDatabase(Employee employee) {
+        try {
+            employeeRepository.save(employee);
+        }
+        catch (IllegalArgumentException exception) {
+            throw new DatabaseSaveFailException("Tried to save Employee that is 'null'.");
+        }
+        catch (OptimisticLockingFailureException exception) {
+            throw new DatabaseSaveFailException("Employee doesn't meet database constraints. " + exception.getMessage());
+        }
     }
 }

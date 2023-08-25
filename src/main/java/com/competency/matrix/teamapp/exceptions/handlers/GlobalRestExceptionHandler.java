@@ -1,7 +1,7 @@
-package com.competency.matrix.teamapp.exceptions;
+package com.competency.matrix.teamapp.exceptions.handlers;
 
 import com.competency.matrix.teamapp.employee.exceptions.EmployeeNotFoundException;
-import jakarta.validation.ValidationException;
+import com.competency.matrix.teamapp.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -26,7 +26,7 @@ public class GlobalRestExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
-    @ExceptionHandler(value = NoMatchForParametersFound.class)
+    @ExceptionHandler(value = NoMatchForParametersFoundException.class)
     private ResponseEntity<Object> handleNoMatchForParametersFound( RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(exception.getMessage());
     }
@@ -34,6 +34,21 @@ public class GlobalRestExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     private ResponseEntity<Object> handleMethodArgumentNotValidException( MethodArgumentNotValidException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(value = DatabaseSaveFailException.class)
+    private ResponseEntity<Object> handleIllegalArgumentException( RuntimeException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(value = PutIdMismatchException.class)
+    private ResponseEntity<Object> handlePutIdMismatchException( RuntimeException exception) {
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(value = ResourceNotFoundException.class)
+    private ResponseEntity<Object> handleResourceNotFoundException( RuntimeException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 
     @ExceptionHandler(value = Exception.class)
