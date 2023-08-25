@@ -33,11 +33,7 @@ public class GlobalRestExceptionHandler {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     private ResponseEntity<Object> handleMethodArgumentNotValidException( MethodArgumentNotValidException exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
-    }
-
-    @ExceptionHandler(value = DatabaseSaveFailException.class)
-    private ResponseEntity<Object> handleIllegalArgumentException( RuntimeException exception) {
+        //TODO: How to get only message i specified in @NotBlank
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
@@ -49,6 +45,16 @@ public class GlobalRestExceptionHandler {
     @ExceptionHandler(value = ResourceNotFoundException.class)
     private ResponseEntity<Object> handleResourceNotFoundException( RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(value = DatabaseSaveFailException.class)
+    private ResponseEntity<Object> handleDatabaseSaveFailException( RuntimeException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(value = DatabaseDeleteFailException.class)
+    private ResponseEntity<Object> handleDatabaseDeleteFailException( RuntimeException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
     }
 
     @ExceptionHandler(value = Exception.class)
