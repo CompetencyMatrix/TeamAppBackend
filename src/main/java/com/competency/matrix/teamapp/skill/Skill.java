@@ -2,7 +2,6 @@ package com.competency.matrix.teamapp.skill;
 
 import com.competency.matrix.teamapp.employeeSkill.EmployeeSkill;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

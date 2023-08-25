@@ -26,10 +26,10 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @NotBlank
+    @NotBlank(message = "Employee name cannot be blank.")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "Employee surname cannot be blank.")
     private String surname;
 
     @Column(name = "hire_date")

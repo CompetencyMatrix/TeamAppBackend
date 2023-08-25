@@ -20,8 +20,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getEmployees(requiredSkillsNames, employeesCommonProjectId));
     }
 
-    @PostMapping(consumes = "application/json;charset=UTF-8")
-    @ResponseBody
+    @PostMapping
     public ResponseEntity<Employee> addEmployee(@Valid @RequestBody Employee employee) {
         employeeService.addEmployee(employee);
         return ResponseEntity.ok().build();

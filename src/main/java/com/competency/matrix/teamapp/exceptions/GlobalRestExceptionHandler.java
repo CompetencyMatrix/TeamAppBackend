@@ -1,8 +1,10 @@
 package com.competency.matrix.teamapp.exceptions;
 
 import com.competency.matrix.teamapp.employee.exceptions.EmployeeNotFoundException;
+import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -29,11 +31,16 @@ public class GlobalRestExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(exception.getMessage());
     }
 
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    private ResponseEntity<Object> handleMethodArgumentNotValidException( MethodArgumentNotValidException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
     @ExceptionHandler(value = Exception.class)
     private ResponseEntity<Object> handleDefaultException(
             Exception exception
     ) {
         String bodyOfResponse = "Couldn't process the request.";
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(bodyOfResponse + " " + exception.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(bodyOfResponse + " " + exception.toString());
     }
 }
