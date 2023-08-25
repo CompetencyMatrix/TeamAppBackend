@@ -15,7 +15,7 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping
-    public ResponseEntity<List<Project>> getProjects(){
+    public ResponseEntity<List<Project>> getProjects() {
         return ResponseEntity.ok(projectService.getProjects());
     }
 }

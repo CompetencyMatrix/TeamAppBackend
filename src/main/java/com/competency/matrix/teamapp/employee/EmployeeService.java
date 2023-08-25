@@ -69,8 +69,7 @@ public class EmployeeService implements EmployeeServiceInterface {
         }
         try {
             employeeRepository.deleteById(pathEmployeeId);
-        }
-        catch (IllegalArgumentException exception) {
+        } catch (IllegalArgumentException exception) {
             throw new DatabaseDeleteFailException("Delete failed: provided ID is 'null'.");
         }
     }
@@ -89,11 +88,9 @@ public class EmployeeService implements EmployeeServiceInterface {
     private void saveToDatabase(Employee employee) {
         try {
             employeeRepository.save(employee);
-        }
-        catch (IllegalArgumentException exception) {
+        } catch (IllegalArgumentException exception) {
             throw new DatabaseSaveFailException("Tried to save Employee that is 'null'.");
-        }
-        catch (OptimisticLockingFailureException exception) {
+        } catch (OptimisticLockingFailureException exception) {
             throw new DatabaseSaveFailException("Employee doesn't meet database constraints. " + exception.getMessage());
         }
     }

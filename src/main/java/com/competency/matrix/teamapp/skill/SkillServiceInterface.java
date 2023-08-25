@@ -4,7 +4,9 @@ import java.util.List;
 
 public interface SkillServiceInterface {
     List<Skill> getSkills();
+
     void addSkills(List<Skill> skills);
+
     void addSkill(Skill skill);
 
 }

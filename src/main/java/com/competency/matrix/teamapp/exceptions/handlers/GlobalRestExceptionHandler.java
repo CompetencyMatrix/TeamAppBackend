@@ -27,33 +27,33 @@ public class GlobalRestExceptionHandler {
     }
 
     @ExceptionHandler(value = NoMatchForParametersFoundException.class)
-    private ResponseEntity<Object> handleNoMatchForParametersFound( RuntimeException exception) {
+    private ResponseEntity<Object> handleNoMatchForParametersFound(RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(exception.getMessage());
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    private ResponseEntity<Object> handleMethodArgumentNotValidException( MethodArgumentNotValidException exception) {
+    private ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         //TODO: How to get only message i specified in @NotBlank
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
     @ExceptionHandler(value = PutIdMismatchException.class)
-    private ResponseEntity<Object> handlePutIdMismatchException( RuntimeException exception) {
+    private ResponseEntity<Object> handlePutIdMismatchException(RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(exception.getMessage());
     }
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
-    private ResponseEntity<Object> handleResourceNotFoundException( RuntimeException exception) {
+    private ResponseEntity<Object> handleResourceNotFoundException(RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 
     @ExceptionHandler(value = DatabaseSaveFailException.class)
-    private ResponseEntity<Object> handleDatabaseSaveFailException( RuntimeException exception) {
+    private ResponseEntity<Object> handleDatabaseSaveFailException(RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
     @ExceptionHandler(value = DatabaseDeleteFailException.class)
-    private ResponseEntity<Object> handleDatabaseDeleteFailException( RuntimeException exception) {
+    private ResponseEntity<Object> handleDatabaseDeleteFailException(RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
     }
 

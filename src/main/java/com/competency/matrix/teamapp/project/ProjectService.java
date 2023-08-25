@@ -7,7 +7,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProjectService implements ProjectServiceInterface{
+public class ProjectService implements ProjectServiceInterface {
     private final ProjectRepository projectRepository;
 
     public List<Project> getProjects() {

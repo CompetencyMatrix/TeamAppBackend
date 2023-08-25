@@ -63,9 +63,9 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     @Transactional
     public List<Employee> initializeEmployees(List<Skill> skills, List<Project> projects) {
         List<Employee> employees = employeeNames.stream()
-                .map(name ->  new Employee(null, name, name + "owski", ZonedDateTime.now().withHour(0).minusDays(RandomGenerator.getDefault().nextInt(3650)), null, null, projects))
+                .map(name -> new Employee(null, name, name + "owski", ZonedDateTime.now().withHour(0).minusDays(RandomGenerator.getDefault().nextInt(3650)), null, null, projects))
                 .collect(Collectors.toList());
-        employees.forEach(employee -> employeeService.addSkillsToEmployee(employee, skills.subList(RandomGenerator.getDefault().nextInt(skills.size()-1), skills.size()-1)));
+        employees.forEach(employee -> employeeService.addSkillsToEmployee(employee, skills.subList(RandomGenerator.getDefault().nextInt(skills.size() - 1), skills.size() - 1)));
         return employees;
     }
 }

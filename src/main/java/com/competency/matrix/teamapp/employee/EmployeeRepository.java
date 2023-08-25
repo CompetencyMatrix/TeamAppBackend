@@ -9,6 +9,7 @@ import java.util.List;
 public interface EmployeeRepository extends JpaRepository<Employee, String> {
 
     List<Employee> findAllByProjectsId(String projectId);
+
     List<Employee> findAllBySkillsSkillNameIn(List<String> skillsNames);
 
 }
