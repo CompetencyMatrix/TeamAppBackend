@@ -32,12 +32,12 @@ public class GlobalRestExceptionHandler {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     private ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
     }
 
     @ExceptionHandler(value = PutIdMismatchException.class)
     private ResponseEntity<Object> handlePutIdMismatchException(RuntimeException exception) {
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
     }
 
     @ExceptionHandler(value = ResourceNotFoundException.class)

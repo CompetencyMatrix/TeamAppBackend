@@ -89,9 +89,9 @@ public class EmployeeService implements EmployeeServiceInterface {
         try {
             employeeRepository.save(employee);
         } catch (IllegalArgumentException exception) {
-            throw new DatabaseSaveFailException("Tried to save Employee that is 'null'.");
+            throw new InvalidParameterException("Tried to save Employee that is 'null'.");
         } catch (OptimisticLockingFailureException exception) {
-            throw new DatabaseSaveFailException("Employee doesn't meet database constraints. " + exception.getMessage());
+            throw new DatabaseSaveFailException("Conflict in data provided and existing in database. Employee doesn't meet database constraints. " + exception.getMessage());
         }
     }
 
@@ -99,9 +99,9 @@ public class EmployeeService implements EmployeeServiceInterface {
         try {
             employeeRepository.saveAll(employees);
         } catch (IllegalArgumentException exception) {
-            throw new DatabaseSaveFailException("Tried to save Employee that is 'null'.");
+            throw new InvalidParameterException("Tried to save Employee that is 'null'.");
         } catch (OptimisticLockingFailureException exception) {
-            throw new DatabaseSaveFailException("Employee doesn't meet database constraints. " + exception.getMessage());
+            throw new DatabaseSaveFailException("Conflict in data provided and existing in database. Employee doesn't meet database constraints. " + exception.getMessage());
         }
     }
 
