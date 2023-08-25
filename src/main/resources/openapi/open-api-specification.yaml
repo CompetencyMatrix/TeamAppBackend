@@ -49,8 +49,6 @@ paths:
                   $ref: '#/components/schemas/Employee'
         '400':
           description: Invalid parameter value
-        '406':
-          description: No matching Employees found
 
     post:
       tags:
@@ -72,8 +70,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Employee'
+        '409':
+          description: Employee with provided ID alread exists in the database
         '422':
-          description: Adding Employee faile due to invalid input
+          description: Adding Employee failed due to invalid input body
 
   /api/employees/{employeeId}:
     put:
@@ -103,14 +103,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Employee'
-        '422':
-          description: Updating Employee failed due to invalid input body
         '404':
           description: Employee not found
         '405':
           description: Supplied Employee's ID not matching with ID from the path
-        '409':
-          description: Conflict between provided Employee and the one existing in the database
+        '422':
+          description: Updating Employee failed due to invalid input body
 
     delete:
       tags:
@@ -153,8 +151,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Employee'
-        '400':
-          description: Invalid ID supplied
         '404':
           description: Employee not found
 
@@ -194,8 +190,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
-        '400':
-          description: Adding Project faile due to invalid input
+        '409':
+          description: Project with provided ID alread exists in the database
+        '422':
+          description: Adding Project failed due to invalid input body
 
   /api/projects/{projectId}:
     put:
@@ -225,12 +223,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
-        '400':
-          description: Invalid ID supplied
         '404':
           description: Project not found
+        '405':
+          description: Supplied Project's ID not matching with ID from the path
         '422':
           description: Validation of the body exception
+
 
     delete:
       tags:
@@ -273,8 +272,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
-        '400':
-          description: Invalid ID supplied
         '404':
           description: Project not found
 
@@ -316,8 +313,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Skill'
-        '400':
-          description: Adding Skill faile due to invalid input
+        '409':
+          description: Skill with provided ID already exists in the database
+        '422':
+          description: Adding Skill faile due to invalid input body
 
   /api/skills/{skillId}:
     put:
@@ -347,10 +346,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Skill'
-        '400':
-          description: Invalid ID supplied
         '404':
           description: Skill not found
+        '405':
+          description: Supplied Skill's ID not matching with ID from the path
         '422':
           description: Validation of the body exception
 

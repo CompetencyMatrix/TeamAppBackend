@@ -109,11 +109,7 @@ public class EmployeeService implements EmployeeServiceInterface {
         if (!projectRepository.existsById(employeesCommonProjectId)) {
             throw new InvalidParameterException("Project with ID: " + employeesCommonProjectId + " doesn't exist.");
         }
-        List<Employee> foundEmployees = employeeRepository.findAllByProjectsId(employeesCommonProjectId);
-        if (foundEmployees.isEmpty()) {
-            throw new NoMatchForParametersFoundException("No Employees assigned to the project with ID: " + employeesCommonProjectId + " found.");
-        }
-        return foundEmployees;
+        return employeeRepository.findAllByProjectsId(employeesCommonProjectId);
     }
 
     private List<Employee> getEmployeesBySkillsNames(List<String> requiredSkillsNames) {
@@ -123,10 +119,6 @@ public class EmployeeService implements EmployeeServiceInterface {
         if (!skillRepository.existsByNameIn(requiredSkillsNames)) {
             throw new InvalidParameterException("Skills with specified names don't exist.");
         }
-        List<Employee> foundEmployees = employeeRepository.findAllBySkillsSkillNameIn(requiredSkillsNames);
-        if (foundEmployees.isEmpty()) {
-            throw new NoMatchForParametersFoundException("No Employees with skills from list: " + requiredSkillsNames + " found.");
+        return employeeRepository.findAllBySkillsSkillNameIn(requiredSkillsNames);
         }
-        return foundEmployees;
-    }
 }
