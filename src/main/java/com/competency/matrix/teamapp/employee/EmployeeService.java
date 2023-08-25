@@ -3,13 +3,19 @@ package com.competency.matrix.teamapp.employee;
 import com.competency.matrix.teamapp.employeeSkill.EmployeeSkill;
 import com.competency.matrix.teamapp.employeeSkill.EmployeeSkillId;
 import com.competency.matrix.teamapp.employeeSkill.EmployeeSkillLevel;
-import com.competency.matrix.teamapp.exceptions.*;
+import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidRequestBodyException;
+import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ConflictWithServerDataException;
+import com.competency.matrix.teamapp.exceptions.server_data_exceptions.DatabaseDeleteFailException;
+import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ResourceNotFoundException;
+import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidParameterException;
+import com.competency.matrix.teamapp.exceptions.request_data_exceptions.PutIdMismatchException;
 import com.competency.matrix.teamapp.project.ProjectRepository;
 import com.competency.matrix.teamapp.skill.Skill;
 import com.competency.matrix.teamapp.skill.SkillRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -34,16 +40,25 @@ public class EmployeeService implements EmployeeServiceInterface {
     }
 
     @Override
+    @Transactional
     public void addEmployees(List<Employee> employees) {
+        if (employees.stream().anyMatch( employee -> employee != null && employeeRepository.existsById(employee.getId()))) {
+            throw new InvalidParameterException("Tried to add employee with ID already present in the database.");
+        }
         saveAllToDatabase(employees);
     }
 
     @Override
+    @Transactional
     public void addEmployee(Employee employee) {
+        if (employee != null && employeeRepository.existsById(employee.getId())) {
+            throw new InvalidParameterException("Tried to add employee with ID already present in the database.");
+        }
         saveToDatabase(employee);
     }
 
     @Override
+    @Transactional
     public Employee updateEmployee(String pathEmployeeId, Employee employee) {
         if (!pathEmployeeId.equals(employee.getId())) {
             throw new PutIdMismatchException("Tried to update update employee with different ID than in the path.");
@@ -54,7 +69,7 @@ public class EmployeeService implements EmployeeServiceInterface {
                 saveToDatabase(employee);
             }
         }
-        return employeeRepository.findById(pathEmployeeId).orElseThrow(() -> new ResourceNotFoundException("Employee was deleted during update"));
+        return employeeRepository.findById(pathEmployeeId).orElseThrow(() -> new ResourceNotFoundException("Employee was deleted during or after update."));
     }
 
     @Override
@@ -63,6 +78,7 @@ public class EmployeeService implements EmployeeServiceInterface {
     }
 
     @Override
+    @Transactional
     public void deleteEmployee(String pathEmployeeId) {
         if (!employeeRepository.existsById(pathEmployeeId)) {
             throw new ResourceNotFoundException("Employee's ID not found in the database.");
@@ -89,9 +105,9 @@ public class EmployeeService implements EmployeeServiceInterface {
         try {
             employeeRepository.save(employee);
         } catch (IllegalArgumentException exception) {
-            throw new InvalidParameterException("Tried to save Employee that is 'null'.");
+            throw new InvalidRequestBodyException("Tried to save Employee that is 'null'.");
         } catch (OptimisticLockingFailureException exception) {
-            throw new DatabaseSaveFailException("Conflict in data provided and existing in database. Employee doesn't meet database constraints. " + exception.getMessage());
+            throw new ConflictWithServerDataException("Conflict during saving in database - version of the data differs from expected. " + exception.getMessage());
         }
     }
 
@@ -99,9 +115,9 @@ public class EmployeeService implements EmployeeServiceInterface {
         try {
             employeeRepository.saveAll(employees);
         } catch (IllegalArgumentException exception) {
-            throw new InvalidParameterException("Tried to save Employee that is 'null'.");
+            throw new InvalidRequestBodyException("Tried to save Employee that is 'null'.");
         } catch (OptimisticLockingFailureException exception) {
-            throw new DatabaseSaveFailException("Conflict in data provided and existing in database. Employee doesn't meet database constraints. " + exception.getMessage());
+            throw new ConflictWithServerDataException("Conflict during saving in database - version of the data differs from expected. " + exception.getMessage());
         }
     }
 

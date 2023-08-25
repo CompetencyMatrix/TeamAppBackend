@@ -70,8 +70,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Employee'
-        '409':
+        '400':
           description: Employee with provided ID alread exists in the database
+        '409':
+          description: Server data has different version from expected
         '422':
           description: Adding Employee failed due to invalid input body
 
@@ -128,8 +130,6 @@ paths:
           description: Employee successfully deleted
         '404':
           description: Employee not found
-        '409':
-          description: Delete impossible
 
     get:
       tags:
@@ -190,8 +190,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
-        '409':
+
+        '400':
           description: Project with provided ID alread exists in the database
+        '409':
+          description: Server data has different version from expected
         '422':
           description: Adding Project failed due to invalid input body
 
@@ -249,8 +252,6 @@ paths:
           description: Project successfully deleted
         '404':
           description: Project not found
-        '409':
-          description: Delete impossible
 
     get:
       tags:
@@ -313,8 +314,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Skill'
-        '409':
+        '400':
           description: Skill with provided ID already exists in the database
+        '409':
+          description: Server data has different version from expected
         '422':
           description: Adding Skill faile due to invalid input body
 
@@ -371,8 +374,7 @@ paths:
           description: Skill successfully deleted
         '404':
           description: Skill not found
-        '409':
-          description: Delete impossible
+
 
     get:
       tags:

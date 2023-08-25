@@ -1,10 +1,6 @@
 package com.competency.matrix.teamapp.exceptions;
 
-import com.competency.matrix.teamapp.employee.exceptions.EmployeeNotFoundException;
-import com.competency.matrix.teamapp.exceptions.server_data_exceptions.DatabaseDeleteFailException;
-import com.competency.matrix.teamapp.exceptions.server_data_exceptions.DatabaseSaveFailException;
-import com.competency.matrix.teamapp.exceptions.server_data_exceptions.NoMatchForParametersFoundException;
-import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ResourceNotFoundException;
+import com.competency.matrix.teamapp.exceptions.server_data_exceptions.*;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidParameterException;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.PutIdMismatchException;
 import org.springframework.http.HttpStatus;
@@ -15,24 +11,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalRestExceptionHandler {
-
-    @ExceptionHandler(value = EmployeeNotFoundException.class)
-    private ResponseEntity<Object> handleEmployeeNotFoundException(
-            RuntimeException exception
-    ) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
-    }
-
     @ExceptionHandler(value = InvalidParameterException.class)
-    private ResponseEntity<Object> handleInvalidParameterException(
-            RuntimeException exception
-    ) {
+    private ResponseEntity<Object> handleInvalidParameterException( RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
-    }
-
-    @ExceptionHandler(value = NoMatchForParametersFoundException.class)
-    private ResponseEntity<Object> handleNoMatchForParametersFound(RuntimeException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(exception.getMessage());
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
@@ -42,17 +23,12 @@ public class GlobalRestExceptionHandler {
 
     @ExceptionHandler(value = PutIdMismatchException.class)
     private ResponseEntity<Object> handlePutIdMismatchException(RuntimeException exception) {
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(exception.getMessage());
     }
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
     private ResponseEntity<Object> handleResourceNotFoundException(RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
-    }
-
-    @ExceptionHandler(value = DatabaseSaveFailException.class)
-    private ResponseEntity<Object> handleDatabaseSaveFailException(RuntimeException exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
     @ExceptionHandler(value = DatabaseDeleteFailException.class)
