@@ -38,12 +38,10 @@ public class Employee {
     @ManyToOne
     private Employee manager;
 
-    //TODO: consider lazy loading - fetch
-    //TODO: Set czy List
     //MappedBy added, because of OpenApi specification - there are possible calls that require finding employees, that have particular skill - search can go in this direction
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    //TODO: JsonIgnore dodane - zeby mozna bylo post - usunac to, przy zmianie na TDO
+    //JsonIgnore dodane, zeby mozna bylo wykonac POST(JsonManagedReference to uniemozliwia, ale jest potrzebna by uniknac Reccursion error w jsonie) - zostanie zmienione w ramach migracji do DTO
     @JsonIgnore
     private Set<EmployeeSkill> skills;
 

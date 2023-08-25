@@ -8,7 +8,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-//TODO: Consider using RestControllerAdvice
 @ControllerAdvice
 public class GlobalRestExceptionHandler {
 
@@ -33,7 +32,6 @@ public class GlobalRestExceptionHandler {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     private ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
-        //TODO: How to get only message i specified in @NotBlank
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 

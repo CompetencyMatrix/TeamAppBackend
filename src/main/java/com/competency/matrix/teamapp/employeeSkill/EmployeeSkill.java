@@ -31,7 +31,6 @@ public class EmployeeSkill {
     @JsonManagedReference
     private Skill skill;
 
-    //TODO: Read about broad approach to using enums here
     @Enumerated(EnumType.ORDINAL)
     private EmployeeSkillLevel employeeSkillLevel;
 

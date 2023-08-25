@@ -26,6 +26,5 @@ public class Skill {
 
     @OneToMany(mappedBy = "skill")
     @JsonBackReference
-    //TODO: czy lepsza List czy Set
     private Set<EmployeeSkill> employeeSkills;
 }
