@@ -2,16 +2,15 @@ package com.competency.matrix.teamapp.employee;
 
 import com.competency.matrix.teamapp.employeeSkill.EmployeeSkill;
 import com.competency.matrix.teamapp.employeeSkill.EmployeeSkillLevel;
+import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidParameterException;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidRequestBodyException;
+import com.competency.matrix.teamapp.exceptions.request_data_exceptions.PutIdMismatchException;
 import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ConflictWithServerDataException;
 import com.competency.matrix.teamapp.exceptions.server_data_exceptions.DatabaseDeleteFailException;
 import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ResourceNotFoundException;
-import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidParameterException;
-import com.competency.matrix.teamapp.exceptions.request_data_exceptions.PutIdMismatchException;
 import com.competency.matrix.teamapp.project.ProjectRepository;
 import com.competency.matrix.teamapp.skill.Skill;
 import com.competency.matrix.teamapp.skill.SkillRepository;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -19,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,7 +42,7 @@ public class EmployeeService implements EmployeeServiceInterface {
     @Override
     @Transactional
     public void addEmployees(List<Employee> employees) {
-        if (employees.stream().anyMatch( employee -> employee == null || employeeRepository.existsById(employee.getId()))) {
+        if (employees.stream().anyMatch(employee -> employee == null || employeeRepository.existsById(employee.getId()))) {
             throw new InvalidParameterException("Tried to add employee with ID already present in the database or given employee was null.");
         }
         saveAllToDatabase(employees);
@@ -134,5 +134,5 @@ public class EmployeeService implements EmployeeServiceInterface {
             throw new InvalidParameterException("Skills with specified names don't exist.");
         }
         return employeeRepository.findAllBySkillsSkillNameIn(requiredSkillsNames);
-        }
+    }
 }

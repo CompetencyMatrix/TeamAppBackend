@@ -1,8 +1,9 @@
 package com.competency.matrix.teamapp.exceptions;
 
-import com.competency.matrix.teamapp.exceptions.server_data_exceptions.*;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidParameterException;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.PutIdMismatchException;
+import com.competency.matrix.teamapp.exceptions.server_data_exceptions.DatabaseDeleteFailException;
+import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalRestExceptionHandler {
     @ExceptionHandler(value = InvalidParameterException.class)
-    private ResponseEntity<Object> handleInvalidParameterException( RuntimeException exception) {
+    private ResponseEntity<Object> handleInvalidParameterException(RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
