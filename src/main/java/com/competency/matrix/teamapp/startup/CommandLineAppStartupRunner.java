@@ -44,7 +44,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     @Transactional
     public List<Skill> initializeSkills() {
         List<Skill> skills = skillNames.stream()
-                .map(name -> new Skill(null, name, new HashSet<>()))
+                .map(name -> new Skill(null, name))
                 .collect(Collectors.toList());
         skillService.addSkills(skills);
         return skills;

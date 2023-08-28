@@ -2,9 +2,8 @@ package com.competency.matrix.teamapp.employeeSkill;
 
 import com.competency.matrix.teamapp.employee.Employee;
 import com.competency.matrix.teamapp.skill.Skill;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,22 +15,22 @@ import lombok.Setter;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class EmployeeSkill {
-    @EmbeddedId
-    private EmployeeSkillId id;
+    @Id
+    @Column(name = "eskill_id")
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employeeId")
-    @MapsId("employeeId")
-    @JsonBackReference
     private Employee employee;
 
     @ManyToOne
     @JoinColumn(name = "skillId")
-    @MapsId("skillId")
-    @JsonManagedReference
     private Skill skill;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private EmployeeSkillLevel employeeSkillLevel;
 
+    public EmployeeSkill(Employee employee, Skill skill, EmployeeSkillLevel junior) {
+    }
 }

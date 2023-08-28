@@ -1,14 +1,10 @@
 package com.competency.matrix.teamapp.skill;
 
-import com.competency.matrix.teamapp.employeeSkill.EmployeeSkill;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
-import java.util.Set;
 
 @Entity
 @Getter
@@ -23,8 +19,4 @@ public class Skill {
 
     @Column(unique = true)
     private String name;
-
-    @OneToMany(mappedBy = "skill")
-    @JsonBackReference
-    private Set<EmployeeSkill> employeeSkills;
 }

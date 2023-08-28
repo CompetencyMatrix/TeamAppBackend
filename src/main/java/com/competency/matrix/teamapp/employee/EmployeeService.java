@@ -1,7 +1,6 @@
 package com.competency.matrix.teamapp.employee;
 
 import com.competency.matrix.teamapp.employeeSkill.EmployeeSkill;
-import com.competency.matrix.teamapp.employeeSkill.EmployeeSkillId;
 import com.competency.matrix.teamapp.employeeSkill.EmployeeSkillLevel;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidRequestBodyException;
 import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ConflictWithServerDataException;
@@ -12,6 +11,7 @@ import com.competency.matrix.teamapp.exceptions.request_data_exceptions.PutIdMis
 import com.competency.matrix.teamapp.project.ProjectRepository;
 import com.competency.matrix.teamapp.skill.Skill;
 import com.competency.matrix.teamapp.skill.SkillRepository;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -93,7 +93,6 @@ public class EmployeeService implements EmployeeServiceInterface {
     @Override
     public void addSkillsToEmployee(Employee employee, List<Skill> skills) {
         Set<EmployeeSkill> employeeSkills = skills.stream().map(skill -> new EmployeeSkill(
-                new EmployeeSkillId(employee.getId(), skill.getId()),
                 employee,
                 skill,
                 EmployeeSkillLevel.JUNIOR)).collect(Collectors.toSet());
