@@ -41,6 +41,6 @@ public class GlobalRestExceptionHandler {
             Exception exception
     ) {
         String bodyOfResponse = "Couldn't process the request.";
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(bodyOfResponse + " " + exception.toString());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(bodyOfResponse + " " + exception.getMessage());
     }
 }

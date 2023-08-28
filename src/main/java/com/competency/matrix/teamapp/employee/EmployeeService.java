@@ -29,7 +29,7 @@ public class EmployeeService implements EmployeeServiceInterface {
     private final SkillRepository skillRepository;
 
     @Override
-    public List<Employee> getEmployees(List<String> requiredSkillsNames, String employeesCommonProjectId) {
+    public List<Employee> getEmployees(List<String> requiredSkillsNames, UUID employeesCommonProjectId) {
         if (requiredSkillsNames != null) {
             return getEmployeesBySkillsNames(requiredSkillsNames);
         }
@@ -42,8 +42,8 @@ public class EmployeeService implements EmployeeServiceInterface {
     @Override
     @Transactional
     public void addEmployees(List<Employee> employees) {
-        if (employees.stream().anyMatch( employee -> employee != null && employeeRepository.existsById(employee.getId()))) {
-            throw new InvalidParameterException("Tried to add employee with ID already present in the database.");
+        if (employees.stream().anyMatch( employee -> employee == null || employeeRepository.existsById(employee.getId()))) {
+            throw new InvalidParameterException("Tried to add employee with ID already present in the database or given employee was null.");
         }
         saveAllToDatabase(employees);
     }
@@ -59,32 +59,31 @@ public class EmployeeService implements EmployeeServiceInterface {
 
     @Override
     @Transactional
-    public Employee updateEmployee(String pathEmployeeId, Employee employee) {
-        if (!pathEmployeeId.equals(employee.getId())) {
+    public Employee updateEmployee(UUID employeeId, Employee employee) {
+        if (!employeeId.equals(employee.getId())) {
             throw new PutIdMismatchException("Tried to update update employee with different ID than in the path.");
-        } else {
-            if (!employeeRepository.existsById(pathEmployeeId)) {
-                throw new ResourceNotFoundException("Employee with specified ID doesn't exist in the database.");
-            } else {
-                saveToDatabase(employee);
-            }
         }
-        return employeeRepository.findById(pathEmployeeId).orElseThrow(() -> new ResourceNotFoundException("Employee was deleted during or after update."));
+        if (!employeeRepository.existsById(employeeId)) {
+            throw new ResourceNotFoundException("Employee with specified ID doesn't exist in the database.");
+        }
+
+        saveToDatabase(employee);
+        return employeeRepository.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException("Employee was deleted during or after update."));
     }
 
     @Override
-    public Employee getEmployee(String pathEmployeeId) {
-        return employeeRepository.findById(pathEmployeeId).orElseThrow(() -> new ResourceNotFoundException("No Employee with provided ID found."));
+    public Employee getEmployee(UUID employeeId) {
+        return employeeRepository.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException("No Employee with provided ID found."));
     }
 
     @Override
     @Transactional
-    public void deleteEmployee(String pathEmployeeId) {
-        if (!employeeRepository.existsById(pathEmployeeId)) {
+    public void deleteEmployee(UUID employeeId) {
+        if (!employeeRepository.existsById(employeeId)) {
             throw new ResourceNotFoundException("Employee's ID not found in the database.");
         }
         try {
-            employeeRepository.deleteById(pathEmployeeId);
+            employeeRepository.deleteById(employeeId);
         } catch (IllegalArgumentException exception) {
             throw new DatabaseDeleteFailException("Delete failed: provided ID is 'null'.");
         }
@@ -120,7 +119,7 @@ public class EmployeeService implements EmployeeServiceInterface {
         }
     }
 
-    private List<Employee> getEmployeesByProjectId(String employeesCommonProjectId) {
+    private List<Employee> getEmployeesByProjectId(UUID employeesCommonProjectId) {
         if (!projectRepository.existsById(employeesCommonProjectId)) {
             throw new InvalidParameterException("Project with ID: " + employeesCommonProjectId + " doesn't exist.");
         }

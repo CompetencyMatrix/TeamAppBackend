@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 
 @Entity
@@ -16,9 +17,9 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 public class Project {
     @Id
-    @Column(name = "projectId")
+    @Column(name = "project_id")
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private UUID id;
     private String name;
     private ZonedDateTime startDate;
     private ZonedDateTime deadline;

@@ -21,16 +21,16 @@ public class EmployeeSkill {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employeeId")
+    @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "skillId")
+    @JoinColumn(name = "skill_id")
     private Skill skill;
 
     @Enumerated(EnumType.STRING)
     private EmployeeSkillLevel employeeSkillLevel;
 
-    public EmployeeSkill(Employee employee, Skill skill, EmployeeSkillLevel junior) {
+    public EmployeeSkill(Employee employee, Skill skill, EmployeeSkillLevel level) {
     }
 }

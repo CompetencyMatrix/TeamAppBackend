@@ -12,6 +12,7 @@ import lombok.Setter;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -20,9 +21,9 @@ import java.util.Set;
 @AllArgsConstructor
 public class Employee {
     @Id
-    @Column(name = "employeeId")
+    @Column(name = "employee_id")
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private UUID id;
 
     @NotBlank(message = "Employee name cannot be blank.")
     private String name;

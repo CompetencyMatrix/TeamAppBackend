@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Entity
 @Getter
 @Setter
@@ -13,9 +15,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Skill {
     @Id
-    @Column(name = "skillId")
+    @Column(name = "skill_id")
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private UUID id;
 
     @Column(unique = true)
     private String name;
