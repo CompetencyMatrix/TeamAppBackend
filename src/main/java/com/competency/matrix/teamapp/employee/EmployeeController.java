@@ -14,6 +14,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/employees")
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class EmployeeController {
     private final EmployeeService employeeService;
 

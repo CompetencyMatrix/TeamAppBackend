@@ -6,7 +6,6 @@ import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidP
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidRequestBodyException;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.PutIdMismatchException;
 import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ConflictWithServerDataException;
-import com.competency.matrix.teamapp.exceptions.server_data_exceptions.DatabaseDeleteFailException;
 import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ResourceNotFoundException;
 import com.competency.matrix.teamapp.project.ProjectRepository;
 import com.competency.matrix.teamapp.skill.Skill;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -42,8 +42,8 @@ public class EmployeeService implements EmployeeServiceInterface {
     @Override
     @Transactional
     public void addEmployees(List<Employee> employees) {
-        if (employees.stream().anyMatch(employee -> employee == null || employeeRepository.existsById(employee.getId()))) {
-            throw new InvalidParameterException("Tried to add employee with ID already present in the database or given employee was null.");
+        if (employees.stream().anyMatch(Objects::isNull)) {
+            throw new InvalidRequestBodyException("Tried to add employee that was null.");
         }
         saveAllToDatabase(employees);
     }
@@ -51,8 +51,8 @@ public class EmployeeService implements EmployeeServiceInterface {
     @Override
     @Transactional
     public void addEmployee(Employee employee) {
-        if (employee != null && employeeRepository.existsById(employee.getId())) {
-            throw new InvalidParameterException("Tried to add employee with ID already present in the database.");
+        if (employee == null) {
+            throw new InvalidRequestBodyException("Tried to add employee that was null.");
         }
         saveToDatabase(employee);
     }
@@ -60,6 +60,9 @@ public class EmployeeService implements EmployeeServiceInterface {
     @Override
     @Transactional
     public Employee updateEmployee(UUID employeeId, Employee employee) {
+        if (employeeId==null) {
+            throw new InvalidParameterException("Provided Employee ID was null.");
+        }
         if (!employeeId.equals(employee.getId())) {
             throw new PutIdMismatchException("Tried to update update employee with different ID than in the path.");
         }
@@ -73,20 +76,22 @@ public class EmployeeService implements EmployeeServiceInterface {
 
     @Override
     public Employee getEmployee(UUID employeeId) {
+        if (employeeId==null) {
+            throw new InvalidParameterException("Provided Employee ID was null.");
+        }
         return employeeRepository.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException("No Employee with provided ID found."));
     }
 
     @Override
     @Transactional
     public void deleteEmployee(UUID employeeId) {
+        if (employeeId==null) {
+            throw new InvalidParameterException("Provided Employee ID was null.");
+        }
         if (!employeeRepository.existsById(employeeId)) {
             throw new ResourceNotFoundException("Employee's ID not found in the database.");
         }
-        try {
-            employeeRepository.deleteById(employeeId);
-        } catch (IllegalArgumentException exception) {
-            throw new DatabaseDeleteFailException("Delete failed: provided ID is 'null'.");
-        }
+        employeeRepository.deleteById(employeeId);
     }
 
     @Override

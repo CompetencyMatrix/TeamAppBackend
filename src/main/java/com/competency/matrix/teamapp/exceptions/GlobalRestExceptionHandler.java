@@ -1,8 +1,9 @@
 package com.competency.matrix.teamapp.exceptions;
 
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidParameterException;
+import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidRequestBodyException;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.PutIdMismatchException;
-import com.competency.matrix.teamapp.exceptions.server_data_exceptions.DatabaseDeleteFailException;
+import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ConflictWithServerDataException;
 import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,14 @@ public class GlobalRestExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
     }
 
+    @ExceptionHandler(value = InvalidRequestBodyException.class)
+    private ResponseEntity<Object> handleInvalidRequestBodyException(RuntimeException exception) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
+    }
+
     @ExceptionHandler(value = PutIdMismatchException.class)
     private ResponseEntity<Object> handlePutIdMismatchException(RuntimeException exception) {
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
@@ -32,8 +38,8 @@ public class GlobalRestExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 
-    @ExceptionHandler(value = DatabaseDeleteFailException.class)
-    private ResponseEntity<Object> handleDatabaseDeleteFailException(RuntimeException exception) {
+    @ExceptionHandler(value = ConflictWithServerDataException.class)
+    private ResponseEntity<Object> handleConflictWithServerDataException(RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
     }
 
