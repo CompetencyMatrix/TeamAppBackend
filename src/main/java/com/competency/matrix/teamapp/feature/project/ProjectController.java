@@ -1,4 +1,4 @@
-package com.competency.matrix.teamapp.skill;
+package com.competency.matrix.teamapp.feature.project;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("skills")
+@RequestMapping("projects")
 @RequiredArgsConstructor
-public class SkillController {
-    private final SkillService skillService;
+public class ProjectController {
+    private final ProjectService projectService;
 
     @GetMapping
-    public ResponseEntity<List<Skill>> getSkills() {
-        return ResponseEntity.ok(skillService.getSkills());
+    public ResponseEntity<List<Project>> getProjects() {
+        return ResponseEntity.ok(projectService.getProjects());
     }
 }

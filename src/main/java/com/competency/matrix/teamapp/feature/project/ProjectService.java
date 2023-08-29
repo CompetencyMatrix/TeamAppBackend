@@ -1,4 +1,4 @@
-package com.competency.matrix.teamapp.project;
+package com.competency.matrix.teamapp.feature.project;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

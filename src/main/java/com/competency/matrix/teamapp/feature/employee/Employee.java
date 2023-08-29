@@ -1,7 +1,7 @@
-package com.competency.matrix.teamapp.employee;
+package com.competency.matrix.teamapp.feature.employee;
 
-import com.competency.matrix.teamapp.employeeSkill.EmployeeSkill;
-import com.competency.matrix.teamapp.project.Project;
+import com.competency.matrix.teamapp.feature.employeeSkill.EmployeeSkill;
+import com.competency.matrix.teamapp.feature.project.Project;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

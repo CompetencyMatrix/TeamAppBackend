@@ -1,11 +1,11 @@
 package com.competency.matrix.teamapp.startup;
 
-import com.competency.matrix.teamapp.employee.Employee;
-import com.competency.matrix.teamapp.employee.EmployeeService;
-import com.competency.matrix.teamapp.project.Project;
-import com.competency.matrix.teamapp.project.ProjectService;
-import com.competency.matrix.teamapp.skill.Skill;
-import com.competency.matrix.teamapp.skill.SkillService;
+import com.competency.matrix.teamapp.feature.employee.Employee;
+import com.competency.matrix.teamapp.feature.employee.EmployeeService;
+import com.competency.matrix.teamapp.feature.project.Project;
+import com.competency.matrix.teamapp.feature.project.ProjectService;
+import com.competency.matrix.teamapp.feature.skill.Skill;
+import com.competency.matrix.teamapp.feature.skill.SkillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;

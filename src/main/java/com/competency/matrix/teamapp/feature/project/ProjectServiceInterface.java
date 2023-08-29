@@ -1,4 +1,4 @@
-package com.competency.matrix.teamapp.project;
+package com.competency.matrix.teamapp.feature.project;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
-package com.competency.matrix.teamapp.employeeSkill;
+package com.competency.matrix.teamapp.feature.employeeSkill;
 
-import com.competency.matrix.teamapp.employee.Employee;
-import com.competency.matrix.teamapp.skill.Skill;
+import com.competency.matrix.teamapp.feature.employee.Employee;
+import com.competency.matrix.teamapp.feature.skill.Skill;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

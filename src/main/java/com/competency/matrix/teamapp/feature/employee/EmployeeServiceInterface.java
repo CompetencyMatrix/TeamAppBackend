@@ -1,6 +1,6 @@
-package com.competency.matrix.teamapp.employee;
+package com.competency.matrix.teamapp.feature.employee;
 
-import com.competency.matrix.teamapp.skill.Skill;
+import com.competency.matrix.teamapp.feature.skill.Skill;
 
 import java.util.List;
 import java.util.UUID;

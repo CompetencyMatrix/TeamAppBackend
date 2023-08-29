@@ -1,4 +1,4 @@
-package com.competency.matrix.teamapp.skill;
+package com.competency.matrix.teamapp.feature.skill;
 
 import java.util.List;
 

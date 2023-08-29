@@ -1,4 +1,4 @@
-package com.competency.matrix.teamapp.project;
+package com.competency.matrix.teamapp.feature.skill;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,22 +6,19 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.time.ZonedDateTime;
 import java.util.UUID;
-
 
 @Entity
 @Getter
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Project {
+public class Skill {
     @Id
-    @Column(name = "project_id")
+    @Column(name = "skill_id")
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String name;
-    private ZonedDateTime startDate;
-    private ZonedDateTime deadline;
 
+    @Column(unique = true)
+    private String name;
 }

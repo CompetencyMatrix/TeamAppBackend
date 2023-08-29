@@ -1,15 +1,15 @@
-package com.competency.matrix.teamapp.employee;
+package com.competency.matrix.teamapp.feature.employee;
 
-import com.competency.matrix.teamapp.employeeSkill.EmployeeSkill;
-import com.competency.matrix.teamapp.employeeSkill.EmployeeSkillLevel;
+import com.competency.matrix.teamapp.feature.employeeSkill.EmployeeSkill;
+import com.competency.matrix.teamapp.feature.employeeSkill.EmployeeSkillLevel;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidParameterException;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidRequestBodyException;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.PutIdMismatchException;
 import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ConflictWithServerDataException;
 import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ResourceNotFoundException;
-import com.competency.matrix.teamapp.project.ProjectRepository;
-import com.competency.matrix.teamapp.skill.Skill;
-import com.competency.matrix.teamapp.skill.SkillRepository;
+import com.competency.matrix.teamapp.feature.project.ProjectRepository;
+import com.competency.matrix.teamapp.feature.skill.Skill;
+import com.competency.matrix.teamapp.feature.skill.SkillRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.competency.matrix.teamapp.skill;
+package com.competency.matrix.teamapp.feature.skill;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

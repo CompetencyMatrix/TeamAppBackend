@@ -1,4 +1,4 @@
-package com.competency.matrix.teamapp.employee;
+package com.competency.matrix.teamapp.feature.employee;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
