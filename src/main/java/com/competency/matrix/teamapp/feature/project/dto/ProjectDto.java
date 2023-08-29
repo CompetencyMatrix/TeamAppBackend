@@ -8,6 +8,9 @@ import java.time.ZonedDateTime;
 import java.util.UUID;
 
 public record ProjectDto(
+        @JsonProperty("id")
+        UUID id,
+
         @JsonProperty("name")
         @NotBlank(message = "Name cannot be null or blank.")
         String name,
