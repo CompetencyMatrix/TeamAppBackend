@@ -48,7 +48,7 @@ public class EmployeeService implements EmployeeServiceInterface {
         if (employeeDtos.stream().anyMatch(Objects::isNull)) {
             throw new InvalidRequestBodyException("Tried to add employee that was null.");
         }
-        List<Employee> employees = employeeMapper.dtoToEntity(employeeDtos);
+        List<Employee> employees = employeeDtos.stream().map(this::convertFromDtoToEntity).collect(Collectors.toList());
 
         saveAllToDatabase(employees);
     }
@@ -156,9 +156,11 @@ public class EmployeeService implements EmployeeServiceInterface {
     }
 
     private Employee convertFromDtoToEntity(EmployeeDto employeeDto){
-        //TODO: redo embbededId - this forces to store generated
+        System.out.println("A______A_________________A____\n" + employeeDto);
         Employee employee = employeeMapper.dtoToEntity(employeeDto);
+        System.out.println("A______A_________________A____\n" + employee);
         convertSkillsFromDtoInEntity(employee);
+        System.out.println("A______A_________________A____\n" + employee);
         return employee;
     }
 

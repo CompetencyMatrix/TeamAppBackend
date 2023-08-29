@@ -16,16 +16,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class EmployeeSkill {
-    @Id
-    @Column(name = "eskill_id")
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @EmbeddedId
+    private EmployeeSkillId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("employeeId")
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @ManyToOne
+    @MapsId("skillId")
     @JoinColumn(name = "skill_id")
     private Skill skill;
 
@@ -36,5 +36,22 @@ public class EmployeeSkill {
         this.employee = employee;
         this.skill = skill;
         this.level = level;
+        this.id = new EmployeeSkillId(employee.getId(), skill.getId());
+    }
+
+    public void setEmployee( Employee employee) {
+        this.employee = employee;
+        if (this.id == null) {
+            this.id = new EmployeeSkillId();
+        }
+        this.id.setEmployeeId(employee.getId());
+    }
+
+    public void setSkill( Skill skill ) {
+        this.skill = skill;
+        if (this.id == null) {
+            this.id = new EmployeeSkillId();
+        }
+        this.id.setSkillId(skill.getId());
     }
 }
