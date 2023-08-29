@@ -144,7 +144,7 @@ public class EmployeeService implements EmployeeServiceInterface {
         } catch (IllegalArgumentException exception) {
             throw new InvalidRequestBodyException("Tried to save Employee that is 'null'.");
         } catch (OptimisticLockingFailureException exception) {
-            throw new ConflictWithServerDataException("Conflict during saving in database - version of the data differs from expected. " + exception.getMessage());
+            throw new ConflictWithServerDataException("Conflict during saving in database - entity assumed to exist in database but wasn't find. " + exception.getMessage());
         }
     }
 
@@ -154,7 +154,7 @@ public class EmployeeService implements EmployeeServiceInterface {
         } catch (IllegalArgumentException exception) {
             throw new InvalidRequestBodyException("Tried to save Employee that is 'null'.");
         } catch (OptimisticLockingFailureException exception) {
-            throw new ConflictWithServerDataException("Conflict during saving in database - version of the data differs from expected. " + exception.getMessage());
+            throw new ConflictWithServerDataException("Conflict during saving in database - entity assumed to exist in database but wasn't find. " + exception.getMessage());
         }
     }
 
