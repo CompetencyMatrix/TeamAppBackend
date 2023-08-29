@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("skills")
 @RequiredArgsConstructor
 public class SkillController {
-    private final SkillService skillService;
+    private final SkillServiceInterface skillService;
 
     @GetMapping
     public ResponseEntity<List<SkillDto>> getSkills() {

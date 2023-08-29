@@ -17,7 +17,7 @@ import java.util.UUID;
 @RequestMapping("/employees")
 @CrossOrigin(origins = {"http://localhost:4200"})
 public class EmployeeController {
-    private final EmployeeService employeeService;
+    private final EmployeeServiceInterface employeeService;
 
     @GetMapping
     public ResponseEntity<List<EmployeeDto>> getEmployees(@RequestParam(required = false, name = "skills") List<String> requiredSkillsNames, @RequestParam(required = false, name = "projectId") UUID employeesCommonProjectId) {
