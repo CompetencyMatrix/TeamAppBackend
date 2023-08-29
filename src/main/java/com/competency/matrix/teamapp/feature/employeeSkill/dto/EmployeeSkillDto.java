@@ -1,10 +1,7 @@
 package com.competency.matrix.teamapp.feature.employeeSkill.dto;
 
-import com.competency.matrix.teamapp.feature.employeeSkill.EmployeeSkillLevel;
-import com.competency.matrix.teamapp.feature.skill.Skill;
 import com.competency.matrix.teamapp.feature.skill.dto.SkillDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.mapstruct.Mapping;
 
 import java.util.UUID;
 

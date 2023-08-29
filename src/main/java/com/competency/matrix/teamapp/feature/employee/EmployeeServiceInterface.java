@@ -1,7 +1,6 @@
 package com.competency.matrix.teamapp.feature.employee;
 
 import com.competency.matrix.teamapp.feature.employee.dto.EmployeeDto;
-import com.competency.matrix.teamapp.feature.skill.Skill;
 import com.competency.matrix.teamapp.feature.skill.dto.SkillDto;
 
 import java.util.List;

@@ -1,9 +1,6 @@
 package com.competency.matrix.teamapp.feature.employeeSkill.dto;
 
 import com.competency.matrix.teamapp.feature.employeeSkill.EmployeeSkill;
-import com.competency.matrix.teamapp.feature.employeeSkill.dto.EmployeeSkillDto;
-import com.competency.matrix.teamapp.feature.project.Project;
-import com.competency.matrix.teamapp.feature.project.dto.ProjectDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

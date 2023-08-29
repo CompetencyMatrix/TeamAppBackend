@@ -21,5 +21,7 @@ public class SkillController {
     }
 
     @GetMapping("levels")
-    public ResponseEntity<List<String>> getSkillLevels() {return ResponseEntity.ok(skillService.getSkillLevels());}
+    public ResponseEntity<List<String>> getSkillLevels() {
+        return ResponseEntity.ok(skillService.getSkillLevels());
+    }
 }

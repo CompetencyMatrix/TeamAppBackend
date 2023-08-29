@@ -1,12 +1,9 @@
 package com.competency.matrix.teamapp.startup;
 
-import com.competency.matrix.teamapp.feature.employee.Employee;
 import com.competency.matrix.teamapp.feature.employee.EmployeeService;
 import com.competency.matrix.teamapp.feature.employee.dto.EmployeeDto;
-import com.competency.matrix.teamapp.feature.project.Project;
 import com.competency.matrix.teamapp.feature.project.ProjectService;
 import com.competency.matrix.teamapp.feature.project.dto.ProjectDto;
-import com.competency.matrix.teamapp.feature.skill.Skill;
 import com.competency.matrix.teamapp.feature.skill.SkillService;
 import com.competency.matrix.teamapp.feature.skill.dto.SkillDto;
 import lombok.RequiredArgsConstructor;

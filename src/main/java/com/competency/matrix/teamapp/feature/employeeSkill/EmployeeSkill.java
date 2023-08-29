@@ -8,8 +8,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @Entity
 @Getter
 @Setter
@@ -39,7 +37,7 @@ public class EmployeeSkill {
         this.id = new EmployeeSkillId(employee.getId(), skill.getId());
     }
 
-    public void setEmployee( Employee employee) {
+    public void setEmployee(Employee employee) {
         this.employee = employee;
         if (this.id == null) {
             this.id = new EmployeeSkillId();
@@ -47,7 +45,7 @@ public class EmployeeSkill {
         this.id.setEmployeeId(employee.getId());
     }
 
-    public void setSkill( Skill skill ) {
+    public void setSkill(Skill skill) {
         this.skill = skill;
         if (this.id == null) {
             this.id = new EmployeeSkillId();

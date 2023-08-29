@@ -1,14 +1,14 @@
 package com.competency.matrix.teamapp.feature.employee;
 
-import com.competency.matrix.teamapp.feature.employee.dto.EmployeeDto;
-import com.competency.matrix.teamapp.feature.employee.dto.EmployeeMapper;
-import com.competency.matrix.teamapp.feature.employeeSkill.EmployeeSkill;
-import com.competency.matrix.teamapp.feature.employeeSkill.EmployeeSkillLevel;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidParameterException;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidRequestBodyException;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.PutIdMismatchException;
 import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ConflictWithServerDataException;
 import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ResourceNotFoundException;
+import com.competency.matrix.teamapp.feature.employee.dto.EmployeeDto;
+import com.competency.matrix.teamapp.feature.employee.dto.EmployeeMapper;
+import com.competency.matrix.teamapp.feature.employeeSkill.EmployeeSkill;
+import com.competency.matrix.teamapp.feature.employeeSkill.EmployeeSkillLevel;
 import com.competency.matrix.teamapp.feature.project.ProjectRepository;
 import com.competency.matrix.teamapp.feature.skill.Skill;
 import com.competency.matrix.teamapp.feature.skill.SkillRepository;
@@ -19,7 +19,10 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,7 +81,7 @@ public class EmployeeService implements EmployeeServiceInterface {
     @Override
     @Transactional
     public EmployeeDto updateEmployee(UUID employeeId, EmployeeDto employeeDto) {
-        if (employeeId==null) {
+        if (employeeId == null) {
             throw new InvalidParameterException("Provided Employee ID was null.");
         }
         if (!employeeId.equals(employeeDto.id())) {
@@ -98,7 +101,7 @@ public class EmployeeService implements EmployeeServiceInterface {
 
     @Override
     public EmployeeDto getEmployee(UUID employeeId) {
-        if (employeeId==null) {
+        if (employeeId == null) {
             throw new InvalidParameterException("Provided Employee ID was null.");
         }
         return employeeMapper.entityToDto(employeeRepository.findById(employeeId)
@@ -109,7 +112,7 @@ public class EmployeeService implements EmployeeServiceInterface {
     @Override
     @Transactional
     public void deleteEmployee(UUID employeeId) {
-        if (employeeId==null) {
+        if (employeeId == null) {
             throw new InvalidParameterException("Provided Employee ID was null.");
         }
         if (!employeeRepository.existsById(employeeId)) {
@@ -128,7 +131,7 @@ public class EmployeeService implements EmployeeServiceInterface {
                 employee,
                 skill,
                 initialLevel)).collect(Collectors.toSet());
-        if (employee.getSkills() != null){
+        if (employee.getSkills() != null) {
             employeeSkills.addAll(employee.getSkills());
         }
         employee.setSkills(employeeSkills);
@@ -155,13 +158,13 @@ public class EmployeeService implements EmployeeServiceInterface {
         }
     }
 
-    private Employee convertFromDtoToEntity(EmployeeDto employeeDto){
+    private Employee convertFromDtoToEntity(EmployeeDto employeeDto) {
         Employee employee = employeeMapper.dtoToEntity(employeeDto);
         convertSkillsFromDtoInEntity(employee);
         return employee;
     }
 
-    private void convertSkillsFromDtoInEntity(Employee employee){
+    private void convertSkillsFromDtoInEntity(Employee employee) {
         Set<EmployeeSkill> skills = employee.getSkills();
         if (skills != null) {
             skills.forEach(skill -> skill.setEmployee(employee));

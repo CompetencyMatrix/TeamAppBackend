@@ -12,4 +12,5 @@ public record SkillDto(
         @NotBlank(message = "Name cannot be null or blank.")
         @JsonProperty("name")
         String name
-) {}
+) {
+}
