@@ -410,7 +410,24 @@ paths:
         '404':
           description: Skill not found
 
-
+  /api/skills/levels:
+    get:
+      tags:
+        - skill
+      summary: Returns all possible skill levels
+      description: Returns an array of skill levels that person can have
+      operationId: getSkillLevels
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type:
+                    string
+                  example: "junior, mid, senior"
 components:
   schemas:
     Employee:
@@ -429,6 +446,9 @@ components:
         hireDate:
           type: string
           format: date-time
+        manager:
+          type: string
+          example: "Alan"
         skills:
           type: array
           items:
@@ -442,16 +462,15 @@ components:
       type: object
       properties:
         name:
-          type: string
-          example: 'Python'
+          $ref: '#/components/schemas/Skill'
         level:
           type: string
           description: Skill level
-          example: advanced
+          example: "junior"
           enum:
-            - beginner
-            - intermediate
-            - advanced
+            - junior
+            - mid
+            - senior
 
     Project:
       type: object

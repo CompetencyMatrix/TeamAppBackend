@@ -18,4 +18,7 @@ public class SkillController {
     public ResponseEntity<List<Skill>> getSkills() {
         return ResponseEntity.ok(skillService.getSkills());
     }
+
+    @GetMapping("levels")
+    public ResponseEntity<List<String>> getSkillLevels() {return ResponseEntity.ok(skillService.getSkillLevels());}
 }

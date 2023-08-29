@@ -9,4 +9,6 @@ public interface SkillServiceInterface {
 
     void addSkill(Skill skill);
 
+    List<String> getSkillLevels();
+
 }
