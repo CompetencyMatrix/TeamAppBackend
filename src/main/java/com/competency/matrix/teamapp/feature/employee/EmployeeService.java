@@ -32,14 +32,27 @@ public class EmployeeService implements EmployeeServiceInterface {
     private final SkillMapper skillMapper;
 
     @Override
-    public List<EmployeeDto> getEmployees(List<String> requiredSkillsNames, UUID employeesCommonProjectId) {
-        if (requiredSkillsNames != null) {
-            return employeeMapper.entityToDto(getEmployeesBySkillsNames(requiredSkillsNames));
-        }
-        if (employeesCommonProjectId != null) {
-            return employeeMapper.entityToDto(getEmployeesByProjectId(employeesCommonProjectId));
-        }
+    public List<EmployeeDto> getEmployees() {
         return employeeMapper.entityToDto(employeeRepository.findAll());
+    }
+
+    @Override
+    public List<EmployeeDto> getEmployeesByProjectId(UUID employeesCommonProjectId) {
+        if (!projectRepository.existsById(employeesCommonProjectId)) {
+            throw new InvalidParameterException("Project with ID: " + employeesCommonProjectId + " doesn't exist.");
+        }
+        return employeeMapper.entityToDto(employeeRepository.findAllByProjectsId(employeesCommonProjectId));
+    }
+
+    @Override
+    public List<EmployeeDto> getEmployeesBySkillsNames(List<String> requiredSkillsNames) {
+        if (requiredSkillsNames.isEmpty()) {
+            throw new InvalidParameterException("Empty list of required Employee's skills passed.");
+        }
+        if (!skillRepository.existsByNameIn(requiredSkillsNames)) {
+            throw new InvalidParameterException("Skills with specified names don't exist.");
+        }
+        return employeeMapper.entityToDto(employeeRepository.findAllBySkillsSkillNameIn(requiredSkillsNames));
     }
 
     @Override
@@ -140,23 +153,6 @@ public class EmployeeService implements EmployeeServiceInterface {
         } catch (OptimisticLockingFailureException exception) {
             throw new ConflictWithServerDataException("Conflict during saving in database - version of the data differs from expected. " + exception.getMessage());
         }
-    }
-
-    private List<Employee> getEmployeesByProjectId(UUID employeesCommonProjectId) {
-        if (!projectRepository.existsById(employeesCommonProjectId)) {
-            throw new InvalidParameterException("Project with ID: " + employeesCommonProjectId + " doesn't exist.");
-        }
-        return employeeRepository.findAllByProjectsId(employeesCommonProjectId);
-    }
-
-    private List<Employee> getEmployeesBySkillsNames(List<String> requiredSkillsNames) {
-        if (requiredSkillsNames.isEmpty()) {
-            throw new InvalidParameterException("Empty list of required Employee's skills passed.");
-        }
-        if (!skillRepository.existsByNameIn(requiredSkillsNames)) {
-            throw new InvalidParameterException("Skills with specified names don't exist.");
-        }
-        return employeeRepository.findAllBySkillsSkillNameIn(requiredSkillsNames);
     }
 
     private Employee convertFromDtoToEntity(EmployeeDto employeeDto){

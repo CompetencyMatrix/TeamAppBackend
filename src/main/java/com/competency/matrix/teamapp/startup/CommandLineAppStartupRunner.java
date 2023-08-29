@@ -68,8 +68,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
                 .map(name -> new EmployeeDto(null, name, name + "owski", ZonedDateTime.now().withHour(0).minusDays(RandomGenerator.getDefault().nextInt(3650)), null, null, projects))
                 .collect(Collectors.toList());
         employeeService.addEmployees(employees);
-        //TODO: refaktor serwisu -
-        employees = employeeService.getEmployees(null,null);
+        employees = employeeService.getEmployees();
         employees.forEach(employee -> employeeService.addSkillsToEmployee(employee, skills.subList(RandomGenerator.getDefault().nextInt(skills.size() - 1), skills.size() - 1)));
         return employees;
     }

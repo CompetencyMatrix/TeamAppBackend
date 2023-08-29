@@ -8,7 +8,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface EmployeeServiceInterface {
-    List<EmployeeDto> getEmployees(List<String> requiredSkillsNames, UUID employeesCommonProjectId);
+    List<EmployeeDto> getEmployees();
+
+    List<EmployeeDto> getEmployeesBySkillsNames(List<String> requiredSkillsNames);
+
+    List<EmployeeDto> getEmployeesByProjectId(UUID employeesCommonProjectId);
 
     void addEmployees(List<EmployeeDto> employees);
 
