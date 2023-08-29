@@ -11,12 +11,11 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface EmployeeSkillMapper {
-    //@Mapping(target = "level", source = "level.name()")
+    @Mapping(target = "employeeId", source = "employee.id")
     EmployeeSkillDto entityToDto(EmployeeSkill employeeSkill);
 
     List<EmployeeSkillDto> entityToDto(Iterable<EmployeeSkill> employeeSkills);
 
-    //@Mapping(target = "level", expression = "java(EmployeeSkillLevel.valueOf(level))")
     EmployeeSkill dtoToEntity(EmployeeSkillDto employeeSkillDto);
 
     List<EmployeeSkill> dtoToEntity(Iterable<EmployeeSkillDto> employeeSkillDtos);

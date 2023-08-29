@@ -59,9 +59,7 @@ public class EmployeeService implements EmployeeServiceInterface {
         if (employeeDto == null) {
             throw new InvalidRequestBodyException("Tried to add employee that was null.");
         }
-        Employee employee = employeeMapper.dtoToEntity(employeeDto);
-
-        saveToDatabase(employee);
+        saveToDatabase(convertFromDtoToEntity(employeeDto));
     }
 
     @Override
@@ -113,8 +111,11 @@ public class EmployeeService implements EmployeeServiceInterface {
                 employee,
                 skill,
                 EmployeeSkillLevel.JUNIOR)).collect(Collectors.toSet());
+        if (employee.getSkills() != null){
+            employeeSkills.addAll(employee.getSkills());
+        }
         employee.setSkills(employeeSkills);
-        employeeRepository.save(employee);
+        saveToDatabase(employee);
     }
 
     private void saveToDatabase(Employee employee) {
@@ -153,4 +154,18 @@ public class EmployeeService implements EmployeeServiceInterface {
         }
         return employeeRepository.findAllBySkillsSkillNameIn(requiredSkillsNames);
     }
+
+    private Employee convertFromDtoToEntity(EmployeeDto employeeDto){
+        //TODO: redo embbededId - this forces to store generated
+        Employee employee = employeeMapper.dtoToEntity(employeeDto);
+        convertSkillsFromDtoInEntity(employee);
+        return employee;
+    }
+
+    private void convertSkillsFromDtoInEntity(Employee employee){
+        Set<EmployeeSkill> skills = employee.getSkills();
+        skills.forEach(skill -> skill.setEmployee(employee));
+        employee.setSkills(skills);
+    }
+
 }
