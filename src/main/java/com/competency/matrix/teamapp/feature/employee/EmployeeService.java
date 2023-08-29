@@ -1,5 +1,7 @@
 package com.competency.matrix.teamapp.feature.employee;
 
+import com.competency.matrix.teamapp.feature.employee.dto.EmployeeDto;
+import com.competency.matrix.teamapp.feature.employee.dto.EmployeeMapper;
 import com.competency.matrix.teamapp.feature.employeeSkill.EmployeeSkill;
 import com.competency.matrix.teamapp.feature.employeeSkill.EmployeeSkillLevel;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidParameterException;
@@ -27,59 +29,70 @@ public class EmployeeService implements EmployeeServiceInterface {
     private final EmployeeRepository employeeRepository;
     private final ProjectRepository projectRepository;
     private final SkillRepository skillRepository;
+    private final EmployeeMapper employeeMapper;
 
     @Override
-    public List<Employee> getEmployees(List<String> requiredSkillsNames, UUID employeesCommonProjectId) {
+    public List<EmployeeDto> getEmployees(List<String> requiredSkillsNames, UUID employeesCommonProjectId) {
         if (requiredSkillsNames != null) {
-            return getEmployeesBySkillsNames(requiredSkillsNames);
+            return employeeMapper.entityToDto(getEmployeesBySkillsNames(requiredSkillsNames));
         }
         if (employeesCommonProjectId != null) {
-            return getEmployeesByProjectId(employeesCommonProjectId);
+            return employeeMapper.entityToDto(getEmployeesByProjectId(employeesCommonProjectId));
         }
-        return employeeRepository.findAll();
+        return employeeMapper.entityToDto(employeeRepository.findAll());
     }
 
     @Override
     @Transactional
-    public void addEmployees(List<Employee> employees) {
-        if (employees.stream().anyMatch(Objects::isNull)) {
+    public void addEmployees(List<EmployeeDto> employeeDtos) {
+        if (employeeDtos.stream().anyMatch(Objects::isNull)) {
             throw new InvalidRequestBodyException("Tried to add employee that was null.");
         }
+        List<Employee> employees = employeeMapper.dtoToEntity(employeeDtos);
+
         saveAllToDatabase(employees);
     }
 
     @Override
     @Transactional
-    public void addEmployee(Employee employee) {
-        if (employee == null) {
+    public void addEmployee(EmployeeDto employeeDto) {
+        if (employeeDto == null) {
             throw new InvalidRequestBodyException("Tried to add employee that was null.");
         }
+        Employee employee = employeeMapper.dtoToEntity(employeeDto);
+
         saveToDatabase(employee);
     }
 
     @Override
     @Transactional
-    public Employee updateEmployee(UUID employeeId, Employee employee) {
+    public EmployeeDto updateEmployee(UUID employeeId, EmployeeDto employeeDto) {
         if (employeeId==null) {
             throw new InvalidParameterException("Provided Employee ID was null.");
         }
-        if (!employeeId.equals(employee.getId())) {
+        if (!employeeId.equals(employeeDto.id())) {
             throw new PutIdMismatchException("Tried to update update employee with different ID than in the path.");
         }
         if (!employeeRepository.existsById(employeeId)) {
             throw new ResourceNotFoundException("Employee with specified ID doesn't exist in the database.");
         }
 
+        Employee employee = employeeMapper.dtoToEntity(employeeDto);
         saveToDatabase(employee);
-        return employeeRepository.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException("Employee was deleted during or after update."));
+
+        return employeeMapper.entityToDto(employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee was deleted during or after update."))
+        );
     }
 
     @Override
-    public Employee getEmployee(UUID employeeId) {
+    public EmployeeDto getEmployee(UUID employeeId) {
         if (employeeId==null) {
             throw new InvalidParameterException("Provided Employee ID was null.");
         }
-        return employeeRepository.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException("No Employee with provided ID found."));
+        return employeeMapper.entityToDto(employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFoundException("No Employee with provided ID found."))
+        );
     }
 
     @Override

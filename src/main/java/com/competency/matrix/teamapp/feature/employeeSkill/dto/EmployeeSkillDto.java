@@ -10,6 +10,6 @@ public record EmployeeSkillDto(
         SkillDto skill,
 
         @JsonProperty("level")
-        EmployeeSkillLevel level
+        String level
 ) {
 }

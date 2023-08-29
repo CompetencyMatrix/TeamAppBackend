@@ -30,11 +30,11 @@ public class EmployeeSkill {
     private Skill skill;
 
     @Enumerated(EnumType.STRING)
-    private EmployeeSkillLevel employeeSkillLevel;
+    private EmployeeSkillLevel level;
 
     public EmployeeSkill(Employee employee, Skill skill, EmployeeSkillLevel level) {
         this.employee = employee;
         this.skill = skill;
-        this.employeeSkillLevel = level;
+        this.level = level;
     }
 }

@@ -1,5 +1,6 @@
 package com.competency.matrix.teamapp.feature.employee;
 
+import com.competency.matrix.teamapp.feature.employee.dto.EmployeeDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,28 +20,28 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getEmployees(@RequestParam(required = false, name = "skills") List<String> requiredSkillsNames, @RequestParam(required = false, name = "projectId") UUID employeesCommonProjectId) {
+    public ResponseEntity<List<EmployeeDto>> getEmployees(@RequestParam(required = false, name = "skills") List<String> requiredSkillsNames, @RequestParam(required = false, name = "projectId") UUID employeesCommonProjectId) {
         return ResponseEntity.ok(employeeService.getEmployees(requiredSkillsNames, employeesCommonProjectId));
     }
 
     @PostMapping
-    public ResponseEntity<Object> addEmployee(@Valid @RequestBody Employee employee) {
+    public ResponseEntity<Object> addEmployee(@Valid @RequestBody EmployeeDto employee) {
         employeeService.addEmployee(employee);
         return ResponseEntity.created(URI.create(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE)).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable UUID id, @Valid @RequestBody Employee employee) {
+    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable UUID id, @Valid @RequestBody EmployeeDto employee) {
         return ResponseEntity.ok(employeeService.updateEmployee(id, employee));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployee(@PathVariable UUID id) {
+    public ResponseEntity<EmployeeDto> getEmployee(@PathVariable UUID id) {
         return ResponseEntity.ok(employeeService.getEmployee(id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Employee> deleteEmployee(@PathVariable UUID id) {
+    public ResponseEntity<EmployeeDto> deleteEmployee(@PathVariable UUID id) {
         employeeService.deleteEmployee(id);
         return ResponseEntity.ok().build();
     }

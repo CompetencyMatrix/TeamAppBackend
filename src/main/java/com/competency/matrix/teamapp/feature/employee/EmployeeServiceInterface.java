@@ -1,22 +1,24 @@
 package com.competency.matrix.teamapp.feature.employee;
 
+import com.competency.matrix.teamapp.feature.employee.dto.EmployeeDto;
 import com.competency.matrix.teamapp.feature.skill.Skill;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface EmployeeServiceInterface {
-    List<Employee> getEmployees(List<String> requiredSkillsNames, UUID employeesCommonProjectId);
+    List<EmployeeDto> getEmployees(List<String> requiredSkillsNames, UUID employeesCommonProjectId);
 
-    void addEmployees(List<Employee> employees);
+    void addEmployees(List<EmployeeDto> employees);
 
-    void addEmployee(Employee employee);
+    void addEmployee(EmployeeDto employee);
 
-    Employee updateEmployee(UUID employeeId, Employee employee);
+    EmployeeDto updateEmployee(UUID employeeId, EmployeeDto employee);
 
-    Employee getEmployee(UUID employeeId);
+    EmployeeDto getEmployee(UUID employeeId);
 
     void deleteEmployee(UUID employeeId);
 
+    //TODO: Dto tutaj
     void addSkillsToEmployee(Employee employee, List<Skill> skills);
 }
