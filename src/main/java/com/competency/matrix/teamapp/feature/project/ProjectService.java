@@ -1,5 +1,7 @@
 package com.competency.matrix.teamapp.feature.project;
 
+import com.competency.matrix.teamapp.feature.project.dto.ProjectDto;
+import com.competency.matrix.teamapp.feature.project.dto.ProjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,16 +11,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProjectService implements ProjectServiceInterface {
     private final ProjectRepository projectRepository;
+    private final ProjectMapper projectMapper;
 
-    public List<Project> getProjects() {
-        return projectRepository.findAll();
+    public List<ProjectDto> getProjects() {
+        return projectMapper.entityToDto(projectRepository.findAll());
     }
 
-    public void addProjects(List<Project> projects) {
-        projectRepository.saveAll(projects);
+    public void addProjects(List<ProjectDto> projects) {
+        projectRepository.saveAll(projectMapper.dtoToEntity(projects));
     }
 
-    public void addProject(Project project) {
-        projectRepository.save(project);
+    public void addProject(ProjectDto project) {
+        projectRepository.save(projectMapper.dtoToEntity(project));
     }
 }

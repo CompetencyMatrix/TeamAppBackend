@@ -1,11 +1,13 @@
 package com.competency.matrix.teamapp.feature.project;
 
+import com.competency.matrix.teamapp.feature.project.dto.ProjectDto;
+
 import java.util.List;
 
 public interface ProjectServiceInterface {
-    List<Project> getProjects();
+    List<ProjectDto> getProjects();
 
-    void addProjects(List<Project> projects);
+    void addProjects(List<ProjectDto> projects);
 
-    void addProject(Project project);
+    void addProject(ProjectDto project);
 }

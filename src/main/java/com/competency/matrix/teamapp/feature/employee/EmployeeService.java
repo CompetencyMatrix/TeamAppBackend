@@ -12,15 +12,14 @@ import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ResourceN
 import com.competency.matrix.teamapp.feature.project.ProjectRepository;
 import com.competency.matrix.teamapp.feature.skill.Skill;
 import com.competency.matrix.teamapp.feature.skill.SkillRepository;
+import com.competency.matrix.teamapp.feature.skill.dto.SkillDto;
+import com.competency.matrix.teamapp.feature.skill.dto.SkillMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +29,7 @@ public class EmployeeService implements EmployeeServiceInterface {
     private final ProjectRepository projectRepository;
     private final SkillRepository skillRepository;
     private final EmployeeMapper employeeMapper;
+    private final SkillMapper skillMapper;
 
     @Override
     public List<EmployeeDto> getEmployees(List<String> requiredSkillsNames, UUID employeesCommonProjectId) {
@@ -106,11 +106,15 @@ public class EmployeeService implements EmployeeServiceInterface {
     }
 
     @Override
-    public void addSkillsToEmployee(Employee employee, List<Skill> skills) {
+    public void addSkillsToEmployee(EmployeeDto employeeDto, List<SkillDto> skillDtos) {
+        EmployeeSkillLevel initialLevel = EmployeeSkillLevel.JUNIOR;
+        Employee employee = employeeMapper.dtoToEntity(employeeDto);
+        List<Skill> skills = skillMapper.dtoToEntity(skillDtos);
+
         Set<EmployeeSkill> employeeSkills = skills.stream().map(skill -> new EmployeeSkill(
                 employee,
                 skill,
-                EmployeeSkillLevel.JUNIOR)).collect(Collectors.toSet());
+                initialLevel)).collect(Collectors.toSet());
         if (employee.getSkills() != null){
             employeeSkills.addAll(employee.getSkills());
         }
@@ -156,18 +160,17 @@ public class EmployeeService implements EmployeeServiceInterface {
     }
 
     private Employee convertFromDtoToEntity(EmployeeDto employeeDto){
-        System.out.println("A______A_________________A____\n" + employeeDto);
         Employee employee = employeeMapper.dtoToEntity(employeeDto);
-        System.out.println("A______A_________________A____\n" + employee);
         convertSkillsFromDtoInEntity(employee);
-        System.out.println("A______A_________________A____\n" + employee);
         return employee;
     }
 
     private void convertSkillsFromDtoInEntity(Employee employee){
         Set<EmployeeSkill> skills = employee.getSkills();
-        skills.forEach(skill -> skill.setEmployee(employee));
-        employee.setSkills(skills);
+        if (skills != null) {
+            skills.forEach(skill -> skill.setEmployee(employee));
+            employee.setSkills(skills);
+        }
     }
 
 }

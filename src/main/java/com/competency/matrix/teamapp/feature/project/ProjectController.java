@@ -1,5 +1,6 @@
 package com.competency.matrix.teamapp.feature.project;
 
+import com.competency.matrix.teamapp.feature.project.dto.ProjectDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping
-    public ResponseEntity<List<Project>> getProjects() {
+    public ResponseEntity<List<ProjectDto>> getProjects() {
         return ResponseEntity.ok(projectService.getProjects());
     }
 }

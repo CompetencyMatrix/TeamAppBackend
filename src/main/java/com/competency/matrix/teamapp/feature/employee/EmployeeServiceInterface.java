@@ -2,6 +2,7 @@ package com.competency.matrix.teamapp.feature.employee;
 
 import com.competency.matrix.teamapp.feature.employee.dto.EmployeeDto;
 import com.competency.matrix.teamapp.feature.skill.Skill;
+import com.competency.matrix.teamapp.feature.skill.dto.SkillDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,5 +21,5 @@ public interface EmployeeServiceInterface {
     void deleteEmployee(UUID employeeId);
 
     //TODO: Dto tutaj
-    void addSkillsToEmployee(Employee employee, List<Skill> skills);
+    void addSkillsToEmployee(EmployeeDto employee, List<SkillDto> skills);
 }

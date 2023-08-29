@@ -2,10 +2,13 @@ package com.competency.matrix.teamapp.startup;
 
 import com.competency.matrix.teamapp.feature.employee.Employee;
 import com.competency.matrix.teamapp.feature.employee.EmployeeService;
+import com.competency.matrix.teamapp.feature.employee.dto.EmployeeDto;
 import com.competency.matrix.teamapp.feature.project.Project;
 import com.competency.matrix.teamapp.feature.project.ProjectService;
+import com.competency.matrix.teamapp.feature.project.dto.ProjectDto;
 import com.competency.matrix.teamapp.feature.skill.Skill;
 import com.competency.matrix.teamapp.feature.skill.SkillService;
+import com.competency.matrix.teamapp.feature.skill.dto.SkillDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -35,35 +38,38 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        List<Skill> skills = initializeSkills();
-        List<Project> projects = initializeProjects();
+        List<SkillDto> skills = initializeSkills();
+        List<ProjectDto> projects = initializeProjects();
         initializeEmployees(skills, projects);
     }
 
     @Transactional
-    public List<Skill> initializeSkills() {
-        List<Skill> skills = skillNames.stream()
-                .map(name -> new Skill(null, name))
+    public List<SkillDto> initializeSkills() {
+        List<SkillDto> skills = skillNames.stream()
+                .map(name -> new SkillDto(null, name))
                 .collect(Collectors.toList());
         skillService.addSkills(skills);
-        return skills;
+        return skillService.getSkills();
     }
 
 
     @Transactional
-    public List<Project> initializeProjects() {
-        List<Project> projects = projectNames.stream()
-                .map(name -> new Project(null, name, ZonedDateTime.now().minusDays(RandomGenerator.getDefault().nextInt(3650)), ZonedDateTime.now().plusDays(RandomGenerator.getDefault().nextInt(3650))))
+    public List<ProjectDto> initializeProjects() {
+        List<ProjectDto> projects = projectNames.stream()
+                .map(name -> new ProjectDto(null, name, ZonedDateTime.now().minusDays(RandomGenerator.getDefault().nextInt(3650)), ZonedDateTime.now().plusDays(RandomGenerator.getDefault().nextInt(3650))))
                 .collect(Collectors.toList());
         projectService.addProjects(projects);
-        return projects;
+        return projectService.getProjects();
     }
 
     @Transactional
-    public List<Employee> initializeEmployees(List<Skill> skills, List<Project> projects) {
-        List<Employee> employees = employeeNames.stream()
-                .map(name -> new Employee(null, name, name + "owski", ZonedDateTime.now().withHour(0).minusDays(RandomGenerator.getDefault().nextInt(3650)), null, null, projects))
+    public List<EmployeeDto> initializeEmployees(List<SkillDto> skills, List<ProjectDto> projects) {
+        List<EmployeeDto> employees = employeeNames.stream()
+                .map(name -> new EmployeeDto(null, name, name + "owski", ZonedDateTime.now().withHour(0).minusDays(RandomGenerator.getDefault().nextInt(3650)), null, null, projects))
                 .collect(Collectors.toList());
+        employeeService.addEmployees(employees);
+        //TODO: refaktor serwisu -
+        employees = employeeService.getEmployees(null,null);
         employees.forEach(employee -> employeeService.addSkillsToEmployee(employee, skills.subList(RandomGenerator.getDefault().nextInt(skills.size() - 1), skills.size() - 1)));
         return employees;
     }

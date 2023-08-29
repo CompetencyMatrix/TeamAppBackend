@@ -1,5 +1,6 @@
 package com.competency.matrix.teamapp.feature.skill;
 
+import com.competency.matrix.teamapp.feature.skill.dto.SkillDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ public class SkillController {
     private final SkillService skillService;
 
     @GetMapping
-    public ResponseEntity<List<Skill>> getSkills() {
+    public ResponseEntity<List<SkillDto>> getSkills() {
         return ResponseEntity.ok(skillService.getSkills());
     }
 
