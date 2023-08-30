@@ -23,6 +23,5 @@ public interface EmployeeServiceInterface {
 
     void deleteEmployee(UUID employeeId);
 
-    //TODO: Dto tutaj
     void addSkillsToEmployee(EmployeeDto employee, List<SkillDto> skills);
 }

@@ -20,7 +20,6 @@ public class SkillService implements SkillServiceInterface {
         return skillMapper.entityToDto(skillRepository.findAll());
     }
 
-    //TODO: checks like in employeeService
     public void addSkills(List<SkillDto> skills) {
         skillRepository.saveAll(skillMapper.dtoToEntity(skills));
     }
