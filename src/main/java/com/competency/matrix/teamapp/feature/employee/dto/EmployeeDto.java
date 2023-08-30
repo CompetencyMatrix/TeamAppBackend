@@ -29,7 +29,6 @@ public record EmployeeDto(
         String surname,
 
         @JsonProperty("hire_date")
-        @Column(name = "hire_date")
         ZonedDateTime hireDate,
 
         @JsonProperty("manager")

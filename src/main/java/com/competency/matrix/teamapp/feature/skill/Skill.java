@@ -1,6 +1,7 @@
 package com.competency.matrix.teamapp.feature.skill;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +21,6 @@ public class Skill {
     private UUID id;
 
     @Column(unique = true)
+    @NotBlank(message = "Name cannot be null or blank.")
     private String name;
 }

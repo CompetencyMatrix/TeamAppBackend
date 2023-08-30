@@ -2,8 +2,11 @@ package com.competency.matrix.teamapp.feature.employee;
 
 import com.competency.matrix.teamapp.feature.employeeSkill.EmployeeSkill;
 import com.competency.matrix.teamapp.feature.project.Project;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +29,12 @@ public class Employee {
     private UUID id;
 
     @NotBlank(message = "Employee name cannot be blank.")
+    @Size(min = 1, max = 50)
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "Name must consists only from letters.")
     private String name;
 
     @NotBlank(message = "Employee surname cannot be blank.")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "Surname must consists only from letters.")
     private String surname;
 
     @Column(name = "hire_date")

@@ -1,10 +1,13 @@
 package com.competency.matrix.teamapp.feature.project;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -22,9 +25,12 @@ public class Project {
     private UUID id;
 
     @Column(unique = true)
+    @NotBlank(message = "Name cannot be null or blank.")
     private String name;
 
+    @DateTimeFormat
     private ZonedDateTime startDate;
 
+    @DateTimeFormat
     private ZonedDateTime deadline;
 }
