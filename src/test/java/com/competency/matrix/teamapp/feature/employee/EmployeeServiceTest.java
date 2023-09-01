@@ -38,12 +38,12 @@ class EmployeeServiceTest {
     @Mock private SkillRepository skillRepository;
     @Spy private EmployeeMapper employeeMapper = Mappers.getMapper(EmployeeMapper.class);
     @Spy private SkillMapper skillMapper = Mappers.getMapper(SkillMapper.class);
+    @InjectMocks
+    private EmployeeService underTest;
 
     private Employee employee;
     private EmployeeDto employeeDto;
     private UUID id;
-    @InjectMocks
-    private EmployeeService underTest;
 
     @BeforeEach
     void setUp() {
