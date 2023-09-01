@@ -61,7 +61,7 @@ public class EmployeeService implements EmployeeServiceInterface {
     @Override
     @Transactional
     public void addEmployees(List<EmployeeDto> employeeDtos) {
-        if (employeeDtos.stream().anyMatch(Objects::isNull)) {
+        if (employeeDtos==null || employeeDtos.stream().anyMatch(Objects::isNull)) {
             throw new InvalidRequestBodyException("Tried to add employee that was null.");
         }
         List<Employee> employees = employeeDtos.stream().map(this::convertFromDtoToEntity).collect(Collectors.toList());
