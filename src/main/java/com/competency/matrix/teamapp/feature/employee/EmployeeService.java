@@ -122,7 +122,9 @@ public class EmployeeService implements EmployeeServiceInterface {
     }
 
     @Override
+    @Transactional
     public void addSkillsToEmployee(EmployeeDto employeeDto, List<SkillDto> skillDtos) {
+        //TODO: sprawdzac czy istnieje i jak nie to rzucac blad
         EmployeeSkillLevel initialLevel = EmployeeSkillLevel.JUNIOR;
         Employee employee = employeeMapper.dtoToEntity(employeeDto);
         List<Skill> skills = skillMapper.dtoToEntity(skillDtos);
@@ -136,6 +138,8 @@ public class EmployeeService implements EmployeeServiceInterface {
         }
         employee.setSkills(employeeSkills);
         saveToDatabase(employee);
+//        TODO
+//        return employeeRepository.findById(employee.getId()).orElseThrow();
     }
 
     private void saveToDatabase(Employee employee) {

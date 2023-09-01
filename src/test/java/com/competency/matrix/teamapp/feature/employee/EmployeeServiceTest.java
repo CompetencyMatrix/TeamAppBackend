@@ -9,14 +9,10 @@ import com.competency.matrix.teamapp.feature.employee.dto.EmployeeMapper;
 import com.competency.matrix.teamapp.feature.employeeSkill.dto.EmployeeSkillDto;
 import com.competency.matrix.teamapp.feature.project.Project;
 import com.competency.matrix.teamapp.feature.project.ProjectRepository;
-import com.competency.matrix.teamapp.feature.project.dto.ProjectDto;
-import com.competency.matrix.teamapp.feature.skill.Skill;
 import com.competency.matrix.teamapp.feature.skill.SkillRepository;
 import com.competency.matrix.teamapp.feature.skill.dto.SkillDto;
 import com.competency.matrix.teamapp.feature.skill.dto.SkillMapper;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
@@ -25,12 +21,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -68,7 +62,7 @@ class EmployeeServiceTest {
         List<EmployeeDto> employeeDtoList = this.underTest.getEmployees();
 
         //THEN
-        assertEquals(employeeMapper.entityToDto(employeeList), employeeDtoList);
+        assertThat(employeeMapper.entityToDto(employeeList)).isEqualTo(employeeDtoList);
         verify(this.employeeRepository).findAll();
     }
 
@@ -81,7 +75,7 @@ class EmployeeServiceTest {
         EmployeeDto employeeDto = this.underTest.getEmployee(id);
 
         //THEN
-        assertEquals(employeeMapper.entityToDto(employee), employeeDto);
+        assertThat(employeeMapper.entityToDto(employee)).isEqualTo(employeeDto);
         verify(this.employeeRepository).findById(id);
     }
 
@@ -106,25 +100,69 @@ class EmployeeServiceTest {
     }
 
     @Test
-    @Disabled
-    void getEmployeesByProjectId() {
+    void when_getEmployeeByProjectIdWhichDoesntExist_should_throwInvalidParameterException() {
         //GIVEN
-        UUID projectId = UUID.fromString("6fc03087-d265-11e7-b8c6-83e29cd24f4c");
-        Project project = new Project(projectId, "TestProject", ZonedDateTime.now(), ZonedDateTime.now());
-        List<Employee> employeeList = new ArrayList<>();
-        employeeList.add(new Employee(UUID.randomUUID(), "TestEmployeeName", "TestEmployeeSurname", ZonedDateTime.now(), null,null, List.of(project)));
-        when(employeeRepository.findAllByProjectsId(any(UUID.class))).thenReturn(employeeList);
+        when(projectRepository.existsById(id)).thenReturn(false);
 
         //WHEN
-        this.underTest.getEmployeesByProjectId(project.getId());
-
         //THEN
-        verify(this.employeeRepository).findAllByProjectsId(project.getId());
+        assertThatThrownBy(()->underTest.getEmployeesByProjectId(id)).isInstanceOf(InvalidParameterException.class);
     }
 
     @Test
-    @Disabled
-    void getEmployeesBySkillsNames() {
+    void when_getEmployeeByProjectId_should_callFindAllByProjectsId() {
+        //GIVEN
+        Project project = new Project(id, "TestProject", ZonedDateTime.now(), ZonedDateTime.now());
+        employee.setProjects(List.of(project));
+        List<Employee> employeeList = List.of(employee);
+        when(projectRepository.existsById(id)).thenReturn(true);
+        when(employeeRepository.findAllByProjectsId(id)).thenReturn(employeeList);
+
+        //WHEN
+        List<EmployeeDto> returnedEmployeeDtos = this.underTest.getEmployeesByProjectId(project.getId());
+
+        //THEN
+        verify(this.employeeRepository).findAllByProjectsId(id);
+        assertThat(returnedEmployeeDtos).isEqualTo(employeeMapper.entityToDto(employeeList));
+    }
+
+    @Test
+    void when_getEmployeesBySkillsNamesWhichAreEmpty_should_throwInvalidParameterException() {
+        //GIVEN
+        List<String> skillNames = new ArrayList<>();
+
+        //WHEN
+        //THEN
+        assertThatThrownBy(()->underTest.getEmployeesBySkillsNames(skillNames)).isInstanceOf(InvalidParameterException.class);
+    }
+
+    @Test
+    void when_getEmployeesBySkillsNamesNotExistingInDatabase_should_throwInvalidParameterException() {
+        //GIVEN
+        List<String> skillNames = List.of("testName1", "testName2");
+        when(skillRepository.existsByNameIn(skillNames)).thenReturn(false);
+
+        //WHEN
+        //THEN
+        assertThatThrownBy(()->underTest.getEmployeesBySkillsNames(skillNames)).isInstanceOf(InvalidParameterException.class);
+    }
+
+    @Test
+    void when_getEmployeesBySkillsNames_should_callFindAllBySkillsSkillNameIn() {
+        //GIVEN
+        List<String> skillNames = List.of("testName1", "testName2");
+        List<Employee> employeeList = List.of(employee);
+
+        when(skillRepository.existsByNameIn(skillNames)).thenReturn(true);
+        when(employeeRepository.findAllBySkillsSkillNameIn(skillNames)).thenReturn(employeeList);
+
+
+        //WHEN
+        List<EmployeeDto> returnedEmployeeDtos = this.underTest.getEmployeesBySkillsNames(skillNames);
+
+        //THEN
+        verify(this.employeeRepository).findAllBySkillsSkillNameIn(skillNames);
+        assertThat(returnedEmployeeDtos).isEqualTo(employeeMapper.entityToDto(employeeList));
     }
 
     @Test
@@ -196,9 +234,9 @@ class EmployeeServiceTest {
 
         //THEN
         verify(employeeRepository).save(employeeArgumentCaptor.capture());
-        assertEquals(employeeMapper.entityToDto(employeeArgumentCaptor.getValue()),
+        assertThat(employeeMapper.entityToDto(employeeArgumentCaptor.getValue())).isEqualTo(
                 employeeMapper.entityToDto(employee));
-        assertEquals(returnedEmployeeDto, employeeDto);
+        assertThat(returnedEmployeeDto).isEqualTo(employeeDto);
     }
 
     @Test
