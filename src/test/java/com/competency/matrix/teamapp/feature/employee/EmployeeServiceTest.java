@@ -2,7 +2,7 @@ package com.competency.matrix.teamapp.feature.employee;
 
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidParameterException;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidRequestBodyException;
-import com.competency.matrix.teamapp.exceptions.request_data_exceptions.PutIdMismatchException;
+import com.competency.matrix.teamapp.exceptions.request_data_exceptions.UpdateIdMismatchException;
 import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ResourceNotFoundException;
 import com.competency.matrix.teamapp.feature.employee.dto.EmployeeDto;
 import com.competency.matrix.teamapp.feature.employee.dto.EmployeeMapper;
@@ -246,7 +246,7 @@ class EmployeeServiceTest {
 
         //WHEN
         //THEN
-        assertThatThrownBy(()->underTest.updateEmployee(differentId, employeeDto)).isInstanceOf(PutIdMismatchException.class);
+        assertThatThrownBy(()->underTest.updateEmployee(differentId, employeeDto)).isInstanceOf(UpdateIdMismatchException.class);
     }
 
     @Test
@@ -316,6 +316,8 @@ class EmployeeServiceTest {
                 new SkillDto(UUID.fromString("5fc03087-d265-11e7-b8c6-83e29cd24f4c"), "testSkill"),
                 new SkillDto(UUID.fromString("6fc03087-d265-11e7-b8c6-83e29cd24f4c"), "testSkill"));
         ArgumentCaptor<Employee> employeeArgumentCaptor = ArgumentCaptor.forClass(Employee.class);
+        when(employeeRepository.existsById(id)).thenReturn(true);
+        when(employeeRepository.findById(id)).thenReturn(Optional.of(employee));
 
         assertNull(employeeDto.skills());
 
@@ -329,5 +331,36 @@ class EmployeeServiceTest {
         EmployeeDto capturedEmployeeDto = employeeMapper.entityToDto(employeeArgumentCaptor.getValue());
 
         assertThat(capturedEmployeeDto.skills().stream().map(EmployeeSkillDto::skill).collect(Collectors.toList())).hasSameElementsAs(skillDtos);
+    }
+
+
+    @Test
+    void when_addSkillsToEmployeeNotExisting_should_throwInvalidParameterException() {
+        //GIVEN
+        List<SkillDto> skillDtos = List.of(
+                new SkillDto(UUID.fromString("5fc03087-d265-11e7-b8c6-83e29cd24f4c"), "testSkill"),
+                new SkillDto(UUID.fromString("6fc03087-d265-11e7-b8c6-83e29cd24f4c"), "testSkill"));
+        when(employeeRepository.existsById(id)).thenReturn(false);
+
+        //WHEN
+        //THEN
+        assertThatThrownBy(() -> underTest.addSkillsToEmployee(employeeDto, skillDtos))
+                .isInstanceOf(InvalidParameterException.class);
+    }
+
+
+    @Test
+    void when_addSkillsToEmployeeNotExistingAfterSave_should_throwResourceNotFoundException() {
+        //GIVEN
+        List<SkillDto> skillDtos = List.of(
+                new SkillDto(UUID.fromString("5fc03087-d265-11e7-b8c6-83e29cd24f4c"), "testSkill"),
+                new SkillDto(UUID.fromString("6fc03087-d265-11e7-b8c6-83e29cd24f4c"), "testSkill"));
+        when(employeeRepository.existsById(id)).thenReturn(true);
+        when(employeeRepository.findById(id)).thenReturn(Optional.ofNullable(null));
+
+        //WHEN
+        //THEN
+        assertThatThrownBy(() -> underTest.addSkillsToEmployee(employeeDto, skillDtos))
+                .isInstanceOf(ResourceNotFoundException.class);
     }
 }

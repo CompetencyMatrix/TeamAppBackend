@@ -23,5 +23,5 @@ public interface EmployeeServiceInterface {
 
     void deleteEmployee(UUID employeeId);
 
-    void addSkillsToEmployee(EmployeeDto employee, List<SkillDto> skills);
+    EmployeeDto addSkillsToEmployee(EmployeeDto employee, List<SkillDto> skills);
 }
