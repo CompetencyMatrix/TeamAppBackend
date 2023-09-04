@@ -23,6 +23,12 @@ paths:
       description: Without parameter - returns all employees from the system. When provided project ID parameter - returns employees, that are assigned to the particular project. When provided comma separated skills names - returns employees, that share those skills.
       operationId: getEmployees
       parameters:
+        - name: name
+          in: query
+          description: Name of the Employee
+          required: false
+          schema:
+            type: string
         - name: skills
           in: query
           description: Skill values that need to be considered for filter

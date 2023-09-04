@@ -20,7 +20,14 @@ public class EmployeeController {
     private final EmployeeServiceInterface employeeService;
 
     @GetMapping
-    public ResponseEntity<List<EmployeeDto>> getEmployees(@RequestParam(required = false, name = "skills") List<String> requiredSkillsNames, @RequestParam(required = false, name = "projectId") UUID employeesCommonProjectId) {
+    public ResponseEntity<List<EmployeeDto>> getEmployees(
+            @RequestParam(required = false, name = "skills") List<String> requiredSkillsNames,
+            @RequestParam(required = false, name = "projectId") UUID employeesCommonProjectId,
+            @RequestParam(required = false, name = "name") String employeeName
+    ) {
+        if( employeeName != null) {
+            return ResponseEntity.ok(employeeService.getEmployeesByName(employeeName));
+        }
         if (requiredSkillsNames != null) {
             return ResponseEntity.ok(employeeService.getEmployeesBySkillsNames(requiredSkillsNames));
         }

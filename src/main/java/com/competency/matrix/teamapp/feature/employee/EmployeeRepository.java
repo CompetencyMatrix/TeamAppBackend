@@ -1,5 +1,6 @@
 package com.competency.matrix.teamapp.feature.employee;
 
+import com.competency.matrix.teamapp.feature.employee.dto.EmployeeDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,5 +13,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
     List<Employee> findAllByProjectsId(UUID projectId);
 
     List<Employee> findAllBySkillsSkillNameIn(List<String> skillsNames);
+
+    List<Employee> findAllByName(String employeeName);
 
 }

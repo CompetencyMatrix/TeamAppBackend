@@ -127,6 +127,20 @@ class EmployeeServiceTest {
     }
 
     @Test
+    void when_getEmployeeByName_should_callFindAllByName() {
+        //GIVEN
+        List<Employee> employeeList = List.of(employee);
+        when(employeeRepository.findAllByName(employee.getName())).thenReturn(employeeList);
+
+        //WHEN
+        List<EmployeeDto> returnedEmployeeDtos = this.underTest.getEmployeesByName(employee.getName());
+
+        //THEN
+        verify(this.employeeRepository).findAllByName(employee.getName());
+        assertThat(returnedEmployeeDtos).isEqualTo(employeeMapper.entityToDto(employeeList));
+    }
+
+    @Test
     void when_getEmployeesBySkillsNamesWhichAreEmpty_should_throwInvalidParameterException() {
         //GIVEN
         List<String> skillNames = new ArrayList<>();

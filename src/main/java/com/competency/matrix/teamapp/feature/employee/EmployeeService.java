@@ -59,6 +59,11 @@ public class EmployeeService implements EmployeeServiceInterface {
     }
 
     @Override
+    public List<EmployeeDto> getEmployeesByName(String employeeName){
+        return employeeMapper.entityToDto(employeeRepository.findAllByName(employeeName));
+    }
+
+    @Override
     @Transactional
     public void addEmployees(List<EmployeeDto> employeeDtos) {
         if (employeeDtos==null || employeeDtos.stream().anyMatch(Objects::isNull)) {
