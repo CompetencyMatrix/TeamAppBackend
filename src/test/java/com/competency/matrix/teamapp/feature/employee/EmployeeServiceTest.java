@@ -23,21 +23,30 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class EmployeeServiceTest {
-    @Mock private EmployeeRepository employeeRepository;
-    @Mock private ProjectRepository projectRepository;
-    @Mock private SkillRepository skillRepository;
-    @Spy private EmployeeMapper employeeMapper = Mappers.getMapper(EmployeeMapper.class);
-    @Spy private SkillMapper skillMapper = Mappers.getMapper(SkillMapper.class);
+    @Mock
+    private EmployeeRepository employeeRepository;
+    @Mock
+    private ProjectRepository projectRepository;
+    @Mock
+    private SkillRepository skillRepository;
+    @Spy
+    private EmployeeMapper employeeMapper = Mappers.getMapper(EmployeeMapper.class);
+    @Spy
+    private SkillMapper skillMapper = Mappers.getMapper(SkillMapper.class);
     @InjectMocks
     private EmployeeService underTest;
 
@@ -48,7 +57,7 @@ class EmployeeServiceTest {
     @BeforeEach
     void setUp() {
         id = UUID.fromString("5fc03087-d265-11e7-b8c6-83e29cd24f4c");
-        employee = new Employee(id, "TestEmployeeName", "TestEmployeeSurname", ZonedDateTime.now(), null,null, null);
+        employee = new Employee(id, "TestEmployeeName", "TestEmployeeSurname", ZonedDateTime.now(), null, null, null);
         employeeDto = employeeMapper.entityToDto(employee);
     }
 
@@ -106,7 +115,7 @@ class EmployeeServiceTest {
 
         //WHEN
         //THEN
-        assertThatThrownBy(()->underTest.getEmployeesByProjectId(id)).isInstanceOf(InvalidParameterException.class);
+        assertThatThrownBy(() -> underTest.getEmployeesByProjectId(id)).isInstanceOf(InvalidParameterException.class);
     }
 
     @Test
@@ -147,7 +156,7 @@ class EmployeeServiceTest {
 
         //WHEN
         //THEN
-        assertThatThrownBy(()->underTest.getEmployeesBySkillsNames(skillNames)).isInstanceOf(InvalidParameterException.class);
+        assertThatThrownBy(() -> underTest.getEmployeesBySkillsNames(skillNames)).isInstanceOf(InvalidParameterException.class);
     }
 
     @Test
@@ -158,7 +167,7 @@ class EmployeeServiceTest {
 
         //WHEN
         //THEN
-        assertThatThrownBy(()->underTest.getEmployeesBySkillsNames(skillNames)).isInstanceOf(InvalidParameterException.class);
+        assertThatThrownBy(() -> underTest.getEmployeesBySkillsNames(skillNames)).isInstanceOf(InvalidParameterException.class);
     }
 
     @Test
@@ -260,7 +269,7 @@ class EmployeeServiceTest {
 
         //WHEN
         //THEN
-        assertThatThrownBy(()->underTest.updateEmployee(differentId, employeeDto)).isInstanceOf(UpdateIdMismatchException.class);
+        assertThatThrownBy(() -> underTest.updateEmployee(differentId, employeeDto)).isInstanceOf(UpdateIdMismatchException.class);
     }
 
     @Test
@@ -269,7 +278,7 @@ class EmployeeServiceTest {
         id = null;
         //WHEN
         //THEN
-        assertThatThrownBy(()->underTest.updateEmployee(id, employeeDto)).isInstanceOf(InvalidParameterException.class);
+        assertThatThrownBy(() -> underTest.updateEmployee(id, employeeDto)).isInstanceOf(InvalidParameterException.class);
     }
 
     @Test
@@ -279,7 +288,7 @@ class EmployeeServiceTest {
 
         //WHEN
         //THEN
-        assertThatThrownBy(()->underTest.updateEmployee(id, employeeDto)).isInstanceOf(ResourceNotFoundException.class);
+        assertThatThrownBy(() -> underTest.updateEmployee(id, employeeDto)).isInstanceOf(ResourceNotFoundException.class);
     }
 
     @Test
@@ -290,7 +299,7 @@ class EmployeeServiceTest {
 
         //WHEN
         //THEN
-        assertThatThrownBy(()->underTest.updateEmployee(id, employeeDto)).isInstanceOf(ResourceNotFoundException.class);
+        assertThatThrownBy(() -> underTest.updateEmployee(id, employeeDto)).isInstanceOf(ResourceNotFoundException.class);
     }
 
     @Test
@@ -304,13 +313,14 @@ class EmployeeServiceTest {
         //THEN
         verify(employeeRepository).deleteById(id);
     }
-        @Test
+
+    @Test
     void when_deleteEmployeeWithNullId_should_throwInvalidParameterException() {
         //GIVEN
         id = null;
         //WHEN
         //THEN
-        assertThatThrownBy(()->underTest.deleteEmployee(id)).isInstanceOf(InvalidParameterException.class);
+        assertThatThrownBy(() -> underTest.deleteEmployee(id)).isInstanceOf(InvalidParameterException.class);
     }
 
     @Test
@@ -320,7 +330,7 @@ class EmployeeServiceTest {
 
         //WHEN
         //THEN
-        assertThatThrownBy(()->underTest.deleteEmployee(id)).isInstanceOf(ResourceNotFoundException.class);
+        assertThatThrownBy(() -> underTest.deleteEmployee(id)).isInstanceOf(ResourceNotFoundException.class);
     }
 
     @Test
@@ -349,7 +359,7 @@ class EmployeeServiceTest {
 
 
     @Test
-    void when_addSkillsToEmployeeNotExisting_should_throwInvalidParameterException() {
+    void when_addSkillsToInvalidEmployee_should_throwInvalidParameterException() {
         //GIVEN
         List<SkillDto> skillDtos = List.of(
                 new SkillDto(UUID.fromString("5fc03087-d265-11e7-b8c6-83e29cd24f4c"), "testSkill"),
@@ -364,7 +374,7 @@ class EmployeeServiceTest {
 
 
     @Test
-    void when_addSkillsToEmployeeNotExistingAfterSave_should_throwResourceNotFoundException() {
+    void when_addSkillsToInvalidEmployeeAfterSave_should_throwResourceNotFoundException() {
         //GIVEN
         List<SkillDto> skillDtos = List.of(
                 new SkillDto(UUID.fromString("5fc03087-d265-11e7-b8c6-83e29cd24f4c"), "testSkill"),

@@ -22,8 +22,10 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SkillServiceTest {
-    @Mock private SkillRepository skillRepository;
-    @Spy private SkillMapper skillMapper = Mappers.getMapper(SkillMapper.class);
+    @Mock
+    private SkillRepository skillRepository;
+    @Spy
+    private SkillMapper skillMapper = Mappers.getMapper(SkillMapper.class);
     @InjectMocks
     private SkillService underTest;
 
@@ -43,7 +45,7 @@ class SkillServiceTest {
     @Test
     void when_getSkillLevels_should_returnSkillLevels() {
         //GIVEN
-        possibleSkillLevels = possibleSkillLevels == null? List.of("JUNIOR", "MID", "SENIOR") : possibleSkillLevels;
+        possibleSkillLevels = possibleSkillLevels == null ? List.of("JUNIOR", "MID", "SENIOR") : possibleSkillLevels;
         //WHEN
         List<String> returnedLevels = underTest.getSkillLevels();
 

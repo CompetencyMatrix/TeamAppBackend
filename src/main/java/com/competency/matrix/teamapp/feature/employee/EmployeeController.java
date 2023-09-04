@@ -25,7 +25,7 @@ public class EmployeeController {
             @RequestParam(required = false, name = "projectId") UUID employeesCommonProjectId,
             @RequestParam(required = false, name = "name") String employeeName
     ) {
-        if( employeeName != null) {
+        if (employeeName != null) {
             return ResponseEntity.ok(employeeService.getEmployeesByName(employeeName));
         }
         if (requiredSkillsNames != null) {

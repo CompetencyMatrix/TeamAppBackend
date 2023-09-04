@@ -2,7 +2,6 @@ package com.competency.matrix.teamapp.feature.employee;
 
 import com.competency.matrix.teamapp.feature.employeeSkill.EmployeeSkill;
 import com.competency.matrix.teamapp.feature.project.Project;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

@@ -1,7 +1,5 @@
 package com.competency.matrix.teamapp.feature.project;
 
-import com.competency.matrix.teamapp.feature.employee.Employee;
-import com.competency.matrix.teamapp.feature.employee.dto.EmployeeDto;
 import com.competency.matrix.teamapp.feature.project.dto.ProjectDto;
 import com.competency.matrix.teamapp.feature.project.dto.ProjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,14 +17,15 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ProjectServiceTest {
-    @Mock private ProjectRepository projectRepository;
-    @Spy private ProjectMapper projectMapper = Mappers.getMapper(ProjectMapper.class);
+    @Mock
+    private ProjectRepository projectRepository;
+    @Spy
+    private ProjectMapper projectMapper = Mappers.getMapper(ProjectMapper.class);
     @InjectMocks
     private ProjectService underTest;
 

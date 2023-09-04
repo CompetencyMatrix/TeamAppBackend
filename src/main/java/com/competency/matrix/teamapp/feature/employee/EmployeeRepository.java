@@ -1,6 +1,5 @@
 package com.competency.matrix.teamapp.feature.employee;
 
-import com.competency.matrix.teamapp.feature.employee.dto.EmployeeDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

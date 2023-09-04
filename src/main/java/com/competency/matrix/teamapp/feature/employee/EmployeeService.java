@@ -59,14 +59,14 @@ public class EmployeeService implements EmployeeServiceInterface {
     }
 
     @Override
-    public List<EmployeeDto> getEmployeesByName(String employeeName){
+    public List<EmployeeDto> getEmployeesByName(String employeeName) {
         return employeeMapper.entityToDto(employeeRepository.findAllByName(employeeName));
     }
 
     @Override
     @Transactional
     public void addEmployees(List<EmployeeDto> employeeDtos) {
-        if (employeeDtos==null || employeeDtos.stream().anyMatch(Objects::isNull)) {
+        if (employeeDtos == null || employeeDtos.stream().anyMatch(Objects::isNull)) {
             throw new InvalidRequestBodyException("Tried to add employee that was null.");
         }
         List<Employee> employees = employeeDtos.stream().map(this::convertFromDtoToEntity).collect(Collectors.toList());
@@ -139,9 +139,9 @@ public class EmployeeService implements EmployeeServiceInterface {
 
         Set<EmployeeSkill> employeeSkills = skills.stream()
                 .map(skill -> new EmployeeSkill(
-                    employee,
-                    skill,
-                    initialLevel))
+                        employee,
+                        skill,
+                        initialLevel))
                 .collect(Collectors.toSet());
         if (employee.getSkills() != null) {
             employeeSkills.addAll(employee.getSkills());
