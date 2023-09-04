@@ -346,7 +346,7 @@ class EmployeeServiceTest {
         assertNull(employeeDto.skills());
 
         //WHEN
-        underTest.addSkillsToEmployee(employeeDto, skillDtos);
+        underTest.addJuniorSkillsToEmployee(employeeDto, skillDtos);
 
         //THEN
         verify(employeeRepository)
@@ -368,7 +368,7 @@ class EmployeeServiceTest {
 
         //WHEN
         //THEN
-        assertThatThrownBy(() -> underTest.addSkillsToEmployee(employeeDto, skillDtos))
+        assertThatThrownBy(() -> underTest.addJuniorSkillsToEmployee(employeeDto, skillDtos))
                 .isInstanceOf(InvalidParameterException.class);
     }
 
@@ -384,7 +384,7 @@ class EmployeeServiceTest {
 
         //WHEN
         //THEN
-        assertThatThrownBy(() -> underTest.addSkillsToEmployee(employeeDto, skillDtos))
+        assertThatThrownBy(() -> underTest.addJuniorSkillsToEmployee(employeeDto, skillDtos))
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 }

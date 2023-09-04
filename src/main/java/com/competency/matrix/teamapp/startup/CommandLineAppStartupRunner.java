@@ -66,7 +66,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
                 .collect(Collectors.toList());
         employeeService.addEmployees(employees);
         employees = employeeService.getEmployees();
-        employees.forEach(employee -> employeeService.addSkillsToEmployee(employee, skills.subList(RandomGenerator.getDefault().nextInt(skills.size() - 1), skills.size() - 1)));
+        employees.forEach(employee -> employeeService.addJuniorSkillsToEmployee(employee, skills.subList(RandomGenerator.getDefault().nextInt(skills.size() - 1), skills.size() - 1)));
         return employees;
     }
 }

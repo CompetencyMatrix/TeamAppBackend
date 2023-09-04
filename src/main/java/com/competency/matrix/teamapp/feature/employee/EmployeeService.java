@@ -128,7 +128,7 @@ public class EmployeeService implements EmployeeServiceInterface {
 
     @Override
     @Transactional
-    public EmployeeDto addSkillsToEmployee(EmployeeDto employeeDto, List<SkillDto> skillDtos) {
+    public EmployeeDto addJuniorSkillsToEmployee(EmployeeDto employeeDto, List<SkillDto> skillDtos) {
         if (!employeeRepository.existsById(employeeDto.id())) {
             throw new InvalidParameterException("Tried to add skills to employee that doesn't exist");
         }
