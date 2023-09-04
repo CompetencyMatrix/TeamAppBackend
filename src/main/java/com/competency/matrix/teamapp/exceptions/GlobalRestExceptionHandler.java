@@ -2,7 +2,7 @@ package com.competency.matrix.teamapp.exceptions;
 
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidParameterException;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidRequestBodyException;
-import com.competency.matrix.teamapp.exceptions.request_data_exceptions.PutIdMismatchException;
+import com.competency.matrix.teamapp.exceptions.request_data_exceptions.UpdateIdMismatchException;
 import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ConflictWithServerDataException;
 import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ public class GlobalRestExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
     }
 
-    @ExceptionHandler(value = PutIdMismatchException.class)
+    @ExceptionHandler(value = UpdateIdMismatchException.class)
     private ResponseEntity<Object> handlePutIdMismatchException(RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
