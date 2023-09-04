@@ -3,7 +3,6 @@ package com.competency.matrix.teamapp.feature.employee.dto;
 import com.competency.matrix.teamapp.feature.employeeSkill.dto.EmployeeSkillDto;
 import com.competency.matrix.teamapp.feature.project.dto.ProjectDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;

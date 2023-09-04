@@ -13,4 +13,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
 
     List<Employee> findAllBySkillsSkillNameIn(List<String> skillsNames);
 
+    List<Employee> findAllByName(String employeeName);
+
 }

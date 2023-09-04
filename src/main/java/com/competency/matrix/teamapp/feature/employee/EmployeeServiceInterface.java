@@ -13,6 +13,8 @@ public interface EmployeeServiceInterface {
 
     List<EmployeeDto> getEmployeesByProjectId(UUID employeesCommonProjectId);
 
+    List<EmployeeDto> getEmployeesByName(String employeeName);
+
     void addEmployees(List<EmployeeDto> employees);
 
     void addEmployee(EmployeeDto employee);
@@ -23,5 +25,5 @@ public interface EmployeeServiceInterface {
 
     void deleteEmployee(UUID employeeId);
 
-    void addSkillsToEmployee(EmployeeDto employee, List<SkillDto> skills);
+    EmployeeDto addSkillsToEmployee(EmployeeDto employee, List<SkillDto> skills);
 }

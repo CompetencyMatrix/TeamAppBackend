@@ -1,6 +1,5 @@
 package com.competency.matrix.teamapp.feature.project;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

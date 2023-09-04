@@ -2,7 +2,7 @@ package com.competency.matrix.teamapp.feature.employee;
 
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidParameterException;
 import com.competency.matrix.teamapp.exceptions.request_data_exceptions.InvalidRequestBodyException;
-import com.competency.matrix.teamapp.exceptions.request_data_exceptions.PutIdMismatchException;
+import com.competency.matrix.teamapp.exceptions.request_data_exceptions.UpdateIdMismatchException;
 import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ConflictWithServerDataException;
 import com.competency.matrix.teamapp.exceptions.server_data_exceptions.ResourceNotFoundException;
 import com.competency.matrix.teamapp.feature.employee.dto.EmployeeDto;
@@ -59,9 +59,14 @@ public class EmployeeService implements EmployeeServiceInterface {
     }
 
     @Override
+    public List<EmployeeDto> getEmployeesByName(String employeeName) {
+        return employeeMapper.entityToDto(employeeRepository.findAllByName(employeeName));
+    }
+
+    @Override
     @Transactional
     public void addEmployees(List<EmployeeDto> employeeDtos) {
-        if (employeeDtos.stream().anyMatch(Objects::isNull)) {
+        if (employeeDtos == null || employeeDtos.stream().anyMatch(Objects::isNull)) {
             throw new InvalidRequestBodyException("Tried to add employee that was null.");
         }
         List<Employee> employees = employeeDtos.stream().map(this::convertFromDtoToEntity).collect(Collectors.toList());
@@ -85,17 +90,17 @@ public class EmployeeService implements EmployeeServiceInterface {
             throw new InvalidParameterException("Provided Employee ID was null.");
         }
         if (!employeeId.equals(employeeDto.id())) {
-            throw new PutIdMismatchException("Tried to update update employee with different ID than in the path.");
+            throw new UpdateIdMismatchException("Tried to update update employee with different ID than in the path.");
         }
         if (!employeeRepository.existsById(employeeId)) {
             throw new ResourceNotFoundException("Employee with specified ID doesn't exist in the database.");
         }
 
-        Employee employee = employeeMapper.dtoToEntity(employeeDto);
+        Employee employee = convertFromDtoToEntity(employeeDto);
         saveToDatabase(employee);
 
         return employeeMapper.entityToDto(employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee was deleted during or after update."))
+                .orElseThrow(() -> new ResourceNotFoundException("Couldn't find employee after update - unexpected behaviour."))
         );
     }
 
@@ -122,20 +127,30 @@ public class EmployeeService implements EmployeeServiceInterface {
     }
 
     @Override
-    public void addSkillsToEmployee(EmployeeDto employeeDto, List<SkillDto> skillDtos) {
-        EmployeeSkillLevel initialLevel = EmployeeSkillLevel.JUNIOR;
-        Employee employee = employeeMapper.dtoToEntity(employeeDto);
+    @Transactional
+    public EmployeeDto addSkillsToEmployee(EmployeeDto employeeDto, List<SkillDto> skillDtos) {
+        if (!employeeRepository.existsById(employeeDto.id())) {
+            throw new InvalidParameterException("Tried to add skills to employee that doesn't exist");
+        }
+
+        final EmployeeSkillLevel initialLevel = EmployeeSkillLevel.JUNIOR;
+        Employee employee = convertFromDtoToEntity(employeeDto);
         List<Skill> skills = skillMapper.dtoToEntity(skillDtos);
 
-        Set<EmployeeSkill> employeeSkills = skills.stream().map(skill -> new EmployeeSkill(
-                employee,
-                skill,
-                initialLevel)).collect(Collectors.toSet());
+        Set<EmployeeSkill> employeeSkills = skills.stream()
+                .map(skill -> new EmployeeSkill(
+                        employee,
+                        skill,
+                        initialLevel))
+                .collect(Collectors.toSet());
         if (employee.getSkills() != null) {
             employeeSkills.addAll(employee.getSkills());
         }
         employee.setSkills(employeeSkills);
         saveToDatabase(employee);
+
+        return employeeMapper.entityToDto(employeeRepository.findById(employeeDto.id())
+                .orElseThrow(() -> new ResourceNotFoundException("Couldn't find employee after save - unexpected behaviour.")));
     }
 
     private void saveToDatabase(Employee employee) {
