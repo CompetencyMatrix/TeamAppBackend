@@ -173,7 +173,6 @@ public class EmployeeService implements EmployeeServiceInterface {
         }
     }
 
-    //tODO: przemysl czy to nie powinno byc publiczne - metody ktore pozwalaja pobrac z bazy np managera i ustawic - no de facto pelna konwersja
     private Employee convertFromDtoToEntity(EmployeeDto employeeDto) {
         Employee employee = employeeMapper.dtoToEntity(employeeDto);
         convertSkillsFromDtoInEntity(employee);

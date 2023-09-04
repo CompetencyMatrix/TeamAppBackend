@@ -43,7 +43,6 @@ class SkillServiceTest {
     @Test
     void when_getSkillLevels_should_returnSkillLevels() {
         //GIVEN
-        //TODO
         possibleSkillLevels = possibleSkillLevels == null? List.of("JUNIOR", "MID", "SENIOR") : possibleSkillLevels;
         //WHEN
         List<String> returnedLevels = underTest.getSkillLevels();
